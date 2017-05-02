@@ -24,10 +24,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FIRApp.configure()
         
         //Quickblox config
-        QBSettings.setApplicationID(5)
-        QBSettings.setAuthKey("ucYFVeFnKyxSNgj")
-        QBSettings.setAuthSecret("qXtVhw658vcL5XM")
-        QBSettings.setAccountKey("9phyMKc9HpqTutF2bfaq")
+        QBSettings.setApplicationID(myAppIdInt)
+        QBSettings.setAuthKey("myAuthKeyString")
+        QBSettings.setAuthSecret("myAuthSecretString")
+        QBSettings.setAccountKey("myAccountKeyString")
         //QBSettings.apiEndpoint("https://apicaduceustelemed.quickblox.com", chatEndpoint: "chatcaduceustelemed.quickblox.com", forServiceZone: QBConnectionZoneTypeProduction)
         
         // Set settings for zone
