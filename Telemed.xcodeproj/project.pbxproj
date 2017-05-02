@@ -1,0 +1,916 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0896A996BBD1E24555CE5AA0 /* Pods_TelemedTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08A850EFE3272600A463B1CA /* Pods_TelemedTests.framework */; };
+		C5E0CA1009156E81DA1ED4FE /* Pods_TelemedUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14FA78BF7539593A9EE556B7 /* Pods_TelemedUITests.framework */; };
+		D4466B15A1E8E675D679EEC3 /* Pods_Telemed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4185B3D6FFCBE23F3FF3CBFD /* Pods_Telemed.framework */; };
+		E61469351EAE778900005B29 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61469341EAE778900005B29 /* AppDelegate.swift */; };
+		E61469371EAE778900005B29 /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61469361EAE778900005B29 /* LoginVC.swift */; };
+		E614693A1EAE778900005B29 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E61469381EAE778900005B29 /* Main.storyboard */; };
+		E614693C1EAE778900005B29 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E614693B1EAE778900005B29 /* Assets.xcassets */; };
+		E614693F1EAE778900005B29 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E614693D1EAE778900005B29 /* LaunchScreen.storyboard */; };
+		E614694A1EAE778900005B29 /* TelemedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61469491EAE778900005B29 /* TelemedTests.swift */; };
+		E61469551EAE778900005B29 /* TelemedUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61469541EAE778900005B29 /* TelemedUITests.swift */; };
+		E61469651EAE7AA600005B29 /* Telemed-Logo_Transparent_Print.png in Resources */ = {isa = PBXBuildFile; fileRef = E61469641EAE7AA600005B29 /* Telemed-Logo_Transparent_Print.png */; };
+		E61469731EAE86E900005B29 /* preloader.png in Resources */ = {isa = PBXBuildFile; fileRef = E61469721EAE86E900005B29 /* preloader.png */; };
+		E61469751EAE87D100005B29 /* preloader.gif in Resources */ = {isa = PBXBuildFile; fileRef = E61469741EAE87D100005B29 /* preloader.gif */; };
+		E614697A1EAFA0CF00005B29 /* CallWebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61469791EAFA0CF00005B29 /* CallWebService.swift */; };
+		E614697C1EAFD01100005B29 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E614697B1EAFD01100005B29 /* GoogleService-Info.plist */; };
+		E614697E1EB0EC4B00005B29 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E614697D1EB0EC4B00005B29 /* UserNotifications.framework */; };
+		E67BBC1F1EB7917700C6D39D /* PatientTelemedVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67BBC1D1EB7917700C6D39D /* PatientTelemedVC.swift */; };
+		E67BBC201EB7917700C6D39D /* PatientTelemedVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = E67BBC1E1EB7917700C6D39D /* PatientTelemedVC.xib */; };
+		E67BBC241EB7C25C00C6D39D /* libicucore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E67BBC221EB7C25C00C6D39D /* libicucore.tbd */; };
+		E67BBC291EB7C27400C6D39D /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E67BBC261EB7C27400C6D39D /* libc++.tbd */; };
+		E67BBC2C1EB7C28600C6D39D /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E67BBC2B1EB7C28600C6D39D /* libresolv.tbd */; };
+		E67BBC2E1EB7C2A300C6D39D /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E67BBC2D1EB7C2A300C6D39D /* libxml2.tbd */; };
+		E67BBC301EB7C2B300C6D39D /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E67BBC2F1EB7C2B300C6D39D /* libz.tbd */; };
+		E67BBC321EB7C2C900C6D39D /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E67BBC311EB7C2C900C6D39D /* CFNetwork.framework */; };
+		E67BBC341EB7C2D800C6D39D /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E67BBC331EB7C2D800C6D39D /* GLKit.framework */; };
+		E67BBC361EB7C2EB00C6D39D /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E67BBC351EB7C2EB00C6D39D /* MobileCoreServices.framework */; };
+		E67BBC381EB7C2FB00C6D39D /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E67BBC371EB7C2FB00C6D39D /* SystemConfiguration.framework */; };
+		E67BBC3A1EB7C30800C6D39D /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E67BBC391EB7C30800C6D39D /* VideoToolbox.framework */; };
+		E67BBC3C1EB7C31800C6D39D /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E67BBC3B1EB7C31800C6D39D /* Accelerate.framework */; };
+		E67BBC3E1EB7C41700C6D39D /* Quickblox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E67BBC3D1EB7C41700C6D39D /* Quickblox.framework */; };
+		E67BBC3F1EB7C41700C6D39D /* Quickblox.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E67BBC3D1EB7C41700C6D39D /* Quickblox.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E67BBC421EB7C43100C6D39D /* QuickbloxWebRTC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E67BBC411EB7C43100C6D39D /* QuickbloxWebRTC.framework */; };
+		E67BBC431EB7C43100C6D39D /* QuickbloxWebRTC.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E67BBC411EB7C43100C6D39D /* QuickbloxWebRTC.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E69ADBC11EB1232400AAD724 /* DataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69ADBC01EB1232400AAD724 /* DataModel.swift */; };
+		E69ADBC31EB2620800AAD724 /* ProviderDashboardVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69ADBC21EB2620800AAD724 /* ProviderDashboardVC.swift */; };
+		E69ADBC51EB264C000AAD724 /* PatientSortingRoomVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69ADBC41EB264C000AAD724 /* PatientSortingRoomVC.swift */; };
+		E69ADBC71EB264F000AAD724 /* SafetyManagerDashboardVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69ADBC61EB264F000AAD724 /* SafetyManagerDashboardVC.swift */; };
+		E69ADBC91EB3C35700AAD724 /* VisitsViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69ADBC81EB3C35600AAD724 /* VisitsViewCell.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		E61469461EAE778900005B29 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E61469291EAE778900005B29 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E61469301EAE778900005B29;
+			remoteInfo = Telemed;
+		};
+		E61469511EAE778900005B29 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E61469291EAE778900005B29 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E61469301EAE778900005B29;
+			remoteInfo = Telemed;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		E67BBC401EB7C41700C6D39D /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				E67BBC431EB7C43100C6D39D /* QuickbloxWebRTC.framework in Embed Frameworks */,
+				E67BBC3F1EB7C41700C6D39D /* Quickblox.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		08A850EFE3272600A463B1CA /* Pods_TelemedTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TelemedTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		142BFDC7B431FB3B6D996389 /* Pods-TelemedTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TelemedTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-TelemedTests/Pods-TelemedTests.release.xcconfig"; sourceTree = "<group>"; };
+		14FA78BF7539593A9EE556B7 /* Pods_TelemedUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TelemedUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		221F5048BC46C208710214ED /* Pods-TelemedUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TelemedUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-TelemedUITests/Pods-TelemedUITests.release.xcconfig"; sourceTree = "<group>"; };
+		2B79E6CD6F318E351F7A0C9B /* Pods-TelemedUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TelemedUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TelemedUITests/Pods-TelemedUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		3CB4926347205DBE66FA7BAA /* Pods-TelemedTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TelemedTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TelemedTests/Pods-TelemedTests.debug.xcconfig"; sourceTree = "<group>"; };
+		4185B3D6FFCBE23F3FF3CBFD /* Pods_Telemed.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Telemed.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4BB9639369A62AC514C69AF0 /* Pods-Telemed.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Telemed.release.xcconfig"; path = "Pods/Target Support Files/Pods-Telemed/Pods-Telemed.release.xcconfig"; sourceTree = "<group>"; };
+		BB558B2BF874410E8F2DF833 /* Pods-Telemed.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Telemed.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Telemed/Pods-Telemed.debug.xcconfig"; sourceTree = "<group>"; };
+		E61469311EAE778900005B29 /* Telemed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Telemed.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E61469341EAE778900005B29 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		E61469361EAE778900005B29 /* LoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
+		E61469391EAE778900005B29 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		E614693B1EAE778900005B29 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E614693E1EAE778900005B29 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		E61469401EAE778900005B29 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E61469451EAE778900005B29 /* TelemedTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TelemedTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E61469491EAE778900005B29 /* TelemedTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelemedTests.swift; sourceTree = "<group>"; };
+		E614694B1EAE778900005B29 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E61469501EAE778900005B29 /* TelemedUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TelemedUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E61469541EAE778900005B29 /* TelemedUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelemedUITests.swift; sourceTree = "<group>"; };
+		E61469561EAE778900005B29 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E61469641EAE7AA600005B29 /* Telemed-Logo_Transparent_Print.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Telemed-Logo_Transparent_Print.png"; sourceTree = "<group>"; };
+		E61469721EAE86E900005B29 /* preloader.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = preloader.png; sourceTree = "<group>"; };
+		E61469741EAE87D100005B29 /* preloader.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = preloader.gif; sourceTree = "<group>"; };
+		E61469791EAFA0CF00005B29 /* CallWebService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallWebService.swift; sourceTree = "<group>"; };
+		E614697B1EAFD01100005B29 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		E614697D1EB0EC4B00005B29 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
+		E67BBC1D1EB7917700C6D39D /* PatientTelemedVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatientTelemedVC.swift; sourceTree = "<group>"; };
+		E67BBC1E1EB7917700C6D39D /* PatientTelemedVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PatientTelemedVC.xib; sourceTree = "<group>"; };
+		E67BBC211EB7C25C00C6D39D /* libicucore.A.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libicucore.A.tbd; path = usr/lib/libicucore.A.tbd; sourceTree = SDKROOT; };
+		E67BBC221EB7C25C00C6D39D /* libicucore.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libicucore.tbd; path = usr/lib/libicucore.tbd; sourceTree = SDKROOT; };
+		E67BBC251EB7C27400C6D39D /* libc++.1.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.1.tbd"; path = "usr/lib/libc++.1.tbd"; sourceTree = SDKROOT; };
+		E67BBC261EB7C27400C6D39D /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
+		E67BBC271EB7C27400C6D39D /* libc++abi.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++abi.tbd"; path = "usr/lib/libc++abi.tbd"; sourceTree = SDKROOT; };
+		E67BBC2B1EB7C28600C6D39D /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = usr/lib/libresolv.tbd; sourceTree = SDKROOT; };
+		E67BBC2D1EB7C2A300C6D39D /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
+		E67BBC2F1EB7C2B300C6D39D /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		E67BBC311EB7C2C900C6D39D /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		E67BBC331EB7C2D800C6D39D /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
+		E67BBC351EB7C2EB00C6D39D /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		E67BBC371EB7C2FB00C6D39D /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		E67BBC391EB7C30800C6D39D /* VideoToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoToolbox.framework; path = System/Library/Frameworks/VideoToolbox.framework; sourceTree = SDKROOT; };
+		E67BBC3B1EB7C31800C6D39D /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
+		E67BBC3D1EB7C41700C6D39D /* Quickblox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quickblox.framework; path = Pods/QuickBlox/Quickblox.framework; sourceTree = "<group>"; };
+		E67BBC411EB7C43100C6D39D /* QuickbloxWebRTC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickbloxWebRTC.framework; path = "Pods/Quickblox-WebRTC/QuickbloxWebRTC.framework"; sourceTree = "<group>"; };
+		E67BBC451EB8F49100C6D39D /* Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "Bridging-Header.h"; path = "Telemed/Bridging-Header.h"; sourceTree = "<group>"; };
+		E69ADBBF1EB0F02C00AAD724 /* Telemed.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Telemed.entitlements; sourceTree = "<group>"; };
+		E69ADBC01EB1232400AAD724 /* DataModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataModel.swift; sourceTree = "<group>"; };
+		E69ADBC21EB2620800AAD724 /* ProviderDashboardVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProviderDashboardVC.swift; sourceTree = "<group>"; };
+		E69ADBC41EB264C000AAD724 /* PatientSortingRoomVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatientSortingRoomVC.swift; sourceTree = "<group>"; };
+		E69ADBC61EB264F000AAD724 /* SafetyManagerDashboardVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SafetyManagerDashboardVC.swift; sourceTree = "<group>"; };
+		E69ADBC81EB3C35600AAD724 /* VisitsViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VisitsViewCell.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		E614692E1EAE778900005B29 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E67BBC3C1EB7C31800C6D39D /* Accelerate.framework in Frameworks */,
+				E67BBC3A1EB7C30800C6D39D /* VideoToolbox.framework in Frameworks */,
+				E67BBC381EB7C2FB00C6D39D /* SystemConfiguration.framework in Frameworks */,
+				E67BBC421EB7C43100C6D39D /* QuickbloxWebRTC.framework in Frameworks */,
+				E67BBC361EB7C2EB00C6D39D /* MobileCoreServices.framework in Frameworks */,
+				E67BBC341EB7C2D800C6D39D /* GLKit.framework in Frameworks */,
+				E67BBC321EB7C2C900C6D39D /* CFNetwork.framework in Frameworks */,
+				E67BBC301EB7C2B300C6D39D /* libz.tbd in Frameworks */,
+				E67BBC2E1EB7C2A300C6D39D /* libxml2.tbd in Frameworks */,
+				E67BBC2C1EB7C28600C6D39D /* libresolv.tbd in Frameworks */,
+				E67BBC291EB7C27400C6D39D /* libc++.tbd in Frameworks */,
+				E67BBC241EB7C25C00C6D39D /* libicucore.tbd in Frameworks */,
+				E614697E1EB0EC4B00005B29 /* UserNotifications.framework in Frameworks */,
+				D4466B15A1E8E675D679EEC3 /* Pods_Telemed.framework in Frameworks */,
+				E67BBC3E1EB7C41700C6D39D /* Quickblox.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E61469421EAE778900005B29 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0896A996BBD1E24555CE5AA0 /* Pods_TelemedTests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E614694D1EAE778900005B29 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C5E0CA1009156E81DA1ED4FE /* Pods_TelemedUITests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		AA22315FD2FBA34A31E4CBE6 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				BB558B2BF874410E8F2DF833 /* Pods-Telemed.debug.xcconfig */,
+				4BB9639369A62AC514C69AF0 /* Pods-Telemed.release.xcconfig */,
+				3CB4926347205DBE66FA7BAA /* Pods-TelemedTests.debug.xcconfig */,
+				142BFDC7B431FB3B6D996389 /* Pods-TelemedTests.release.xcconfig */,
+				2B79E6CD6F318E351F7A0C9B /* Pods-TelemedUITests.debug.xcconfig */,
+				221F5048BC46C208710214ED /* Pods-TelemedUITests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		E329015917D57D924CBA3A0D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E67BBC3B1EB7C31800C6D39D /* Accelerate.framework */,
+				E67BBC391EB7C30800C6D39D /* VideoToolbox.framework */,
+				E67BBC371EB7C2FB00C6D39D /* SystemConfiguration.framework */,
+				E67BBC351EB7C2EB00C6D39D /* MobileCoreServices.framework */,
+				E67BBC331EB7C2D800C6D39D /* GLKit.framework */,
+				E67BBC311EB7C2C900C6D39D /* CFNetwork.framework */,
+				E67BBC2F1EB7C2B300C6D39D /* libz.tbd */,
+				E67BBC2D1EB7C2A300C6D39D /* libxml2.tbd */,
+				E67BBC2B1EB7C28600C6D39D /* libresolv.tbd */,
+				E67BBC251EB7C27400C6D39D /* libc++.1.tbd */,
+				E67BBC261EB7C27400C6D39D /* libc++.tbd */,
+				E67BBC271EB7C27400C6D39D /* libc++abi.tbd */,
+				E67BBC211EB7C25C00C6D39D /* libicucore.A.tbd */,
+				E67BBC221EB7C25C00C6D39D /* libicucore.tbd */,
+				E614697D1EB0EC4B00005B29 /* UserNotifications.framework */,
+				4185B3D6FFCBE23F3FF3CBFD /* Pods_Telemed.framework */,
+				08A850EFE3272600A463B1CA /* Pods_TelemedTests.framework */,
+				14FA78BF7539593A9EE556B7 /* Pods_TelemedUITests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		E61469281EAE778900005B29 = {
+			isa = PBXGroup;
+			children = (
+				E67BBC451EB8F49100C6D39D /* Bridging-Header.h */,
+				E67BBC411EB7C43100C6D39D /* QuickbloxWebRTC.framework */,
+				E67BBC3D1EB7C41700C6D39D /* Quickblox.framework */,
+				E61469331EAE778900005B29 /* Telemed */,
+				E61469481EAE778900005B29 /* TelemedTests */,
+				E61469531EAE778900005B29 /* TelemedUITests */,
+				E61469321EAE778900005B29 /* Products */,
+				AA22315FD2FBA34A31E4CBE6 /* Pods */,
+				E329015917D57D924CBA3A0D /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		E61469321EAE778900005B29 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E61469311EAE778900005B29 /* Telemed.app */,
+				E61469451EAE778900005B29 /* TelemedTests.xctest */,
+				E61469501EAE778900005B29 /* TelemedUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E61469331EAE778900005B29 /* Telemed */ = {
+			isa = PBXGroup;
+			children = (
+				E69ADBBF1EB0F02C00AAD724 /* Telemed.entitlements */,
+				E61469781EAFA06300005B29 /* Services */,
+				E61469631EAE7AA600005B29 /* img */,
+				E61469381EAE778900005B29 /* Main.storyboard */,
+				E61469341EAE778900005B29 /* AppDelegate.swift */,
+				E61469361EAE778900005B29 /* LoginVC.swift */,
+				E69ADBC61EB264F000AAD724 /* SafetyManagerDashboardVC.swift */,
+				E69ADBC81EB3C35600AAD724 /* VisitsViewCell.swift */,
+				E69ADBC21EB2620800AAD724 /* ProviderDashboardVC.swift */,
+				E69ADBC41EB264C000AAD724 /* PatientSortingRoomVC.swift */,
+				E67BBC1D1EB7917700C6D39D /* PatientTelemedVC.swift */,
+				E614693B1EAE778900005B29 /* Assets.xcassets */,
+				E614693D1EAE778900005B29 /* LaunchScreen.storyboard */,
+				E67BBC1E1EB7917700C6D39D /* PatientTelemedVC.xib */,
+				E61469401EAE778900005B29 /* Info.plist */,
+				E614697B1EAFD01100005B29 /* GoogleService-Info.plist */,
+			);
+			path = Telemed;
+			sourceTree = "<group>";
+		};
+		E61469481EAE778900005B29 /* TelemedTests */ = {
+			isa = PBXGroup;
+			children = (
+				E61469491EAE778900005B29 /* TelemedTests.swift */,
+				E614694B1EAE778900005B29 /* Info.plist */,
+			);
+			path = TelemedTests;
+			sourceTree = "<group>";
+		};
+		E61469531EAE778900005B29 /* TelemedUITests */ = {
+			isa = PBXGroup;
+			children = (
+				E61469541EAE778900005B29 /* TelemedUITests.swift */,
+				E61469561EAE778900005B29 /* Info.plist */,
+			);
+			path = TelemedUITests;
+			sourceTree = "<group>";
+		};
+		E61469631EAE7AA600005B29 /* img */ = {
+			isa = PBXGroup;
+			children = (
+				E61469741EAE87D100005B29 /* preloader.gif */,
+				E61469721EAE86E900005B29 /* preloader.png */,
+				E61469641EAE7AA600005B29 /* Telemed-Logo_Transparent_Print.png */,
+			);
+			path = img;
+			sourceTree = "<group>";
+		};
+		E61469781EAFA06300005B29 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				E69ADBC01EB1232400AAD724 /* DataModel.swift */,
+				E61469791EAFA0CF00005B29 /* CallWebService.swift */,
+			);
+			name = Services;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		E61469301EAE778900005B29 /* Telemed */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E61469591EAE778900005B29 /* Build configuration list for PBXNativeTarget "Telemed" */;
+			buildPhases = (
+				8D899DBE51F38A0BE5A4066A /* [CP] Check Pods Manifest.lock */,
+				E614692D1EAE778900005B29 /* Sources */,
+				E614692E1EAE778900005B29 /* Frameworks */,
+				E614692F1EAE778900005B29 /* Resources */,
+				38821B44FB4F525A39F8DDB3 /* [CP] Embed Pods Frameworks */,
+				FCE4A4B3C9AC7DA61AECF416 /* [CP] Copy Pods Resources */,
+				E67BBC401EB7C41700C6D39D /* Embed Frameworks */,
+				E67BBC441EB7CC4F00C6D39D /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Telemed;
+			productName = Telemed;
+			productReference = E61469311EAE778900005B29 /* Telemed.app */;
+			productType = "com.apple.product-type.application";
+		};
+		E61469441EAE778900005B29 /* TelemedTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E614695C1EAE778900005B29 /* Build configuration list for PBXNativeTarget "TelemedTests" */;
+			buildPhases = (
+				2B975B9626E401DF5FD3500B /* [CP] Check Pods Manifest.lock */,
+				E61469411EAE778900005B29 /* Sources */,
+				E61469421EAE778900005B29 /* Frameworks */,
+				E61469431EAE778900005B29 /* Resources */,
+				FE94996A0EBC137017998CC3 /* [CP] Embed Pods Frameworks */,
+				895A9E2B8FBFB08ABE98F49D /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E61469471EAE778900005B29 /* PBXTargetDependency */,
+			);
+			name = TelemedTests;
+			productName = TelemedTests;
+			productReference = E61469451EAE778900005B29 /* TelemedTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		E614694F1EAE778900005B29 /* TelemedUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E614695F1EAE778900005B29 /* Build configuration list for PBXNativeTarget "TelemedUITests" */;
+			buildPhases = (
+				A98DC8E40B1249491D0652AC /* [CP] Check Pods Manifest.lock */,
+				E614694C1EAE778900005B29 /* Sources */,
+				E614694D1EAE778900005B29 /* Frameworks */,
+				E614694E1EAE778900005B29 /* Resources */,
+				E3DC9CE95EB3F0273665EEB0 /* [CP] Embed Pods Frameworks */,
+				1582B823F8E1C509D3383D9A /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E61469521EAE778900005B29 /* PBXTargetDependency */,
+			);
+			name = TelemedUITests;
+			productName = TelemedUITests;
+			productReference = E61469501EAE778900005B29 /* TelemedUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		E61469291EAE778900005B29 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0830;
+				LastUpgradeCheck = 0830;
+				ORGANIZATIONNAME = "Caduceus USA";
+				TargetAttributes = {
+					E61469301EAE778900005B29 = {
+						CreatedOnToolsVersion = 8.3.2;
+						DevelopmentTeam = FPPC33KLR7;
+						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
+					};
+					E61469441EAE778900005B29 = {
+						CreatedOnToolsVersion = 8.3.2;
+						DevelopmentTeam = FPPC33KLR7;
+						ProvisioningStyle = Automatic;
+						TestTargetID = E61469301EAE778900005B29;
+					};
+					E614694F1EAE778900005B29 = {
+						CreatedOnToolsVersion = 8.3.2;
+						DevelopmentTeam = FPPC33KLR7;
+						ProvisioningStyle = Automatic;
+						TestTargetID = E61469301EAE778900005B29;
+					};
+				};
+			};
+			buildConfigurationList = E614692C1EAE778900005B29 /* Build configuration list for PBXProject "Telemed" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = E61469281EAE778900005B29;
+			productRefGroup = E61469321EAE778900005B29 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E61469301EAE778900005B29 /* Telemed */,
+				E61469441EAE778900005B29 /* TelemedTests */,
+				E614694F1EAE778900005B29 /* TelemedUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		E614692F1EAE778900005B29 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E61469731EAE86E900005B29 /* preloader.png in Resources */,
+				E61469651EAE7AA600005B29 /* Telemed-Logo_Transparent_Print.png in Resources */,
+				E614693F1EAE778900005B29 /* LaunchScreen.storyboard in Resources */,
+				E67BBC201EB7917700C6D39D /* PatientTelemedVC.xib in Resources */,
+				E614693C1EAE778900005B29 /* Assets.xcassets in Resources */,
+				E614693A1EAE778900005B29 /* Main.storyboard in Resources */,
+				E61469751EAE87D100005B29 /* preloader.gif in Resources */,
+				E614697C1EAFD01100005B29 /* GoogleService-Info.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E61469431EAE778900005B29 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E614694E1EAE778900005B29 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		1582B823F8E1C509D3383D9A /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TelemedUITests/Pods-TelemedUITests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		2B975B9626E401DF5FD3500B /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		38821B44FB4F525A39F8DDB3 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Telemed/Pods-Telemed-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		895A9E2B8FBFB08ABE98F49D /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TelemedTests/Pods-TelemedTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8D899DBE51F38A0BE5A4066A /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		A98DC8E40B1249491D0652AC /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		E3DC9CE95EB3F0273665EEB0 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TelemedUITests/Pods-TelemedUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E67BBC441EB7CC4F00C6D39D /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "bash \"${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/QuickbloxWebRTC.framework/strip-framework.sh\"";
+		};
+		FCE4A4B3C9AC7DA61AECF416 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Telemed/Pods-Telemed-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FE94996A0EBC137017998CC3 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TelemedTests/Pods-TelemedTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		E614692D1EAE778900005B29 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E61469371EAE778900005B29 /* LoginVC.swift in Sources */,
+				E67BBC1F1EB7917700C6D39D /* PatientTelemedVC.swift in Sources */,
+				E69ADBC31EB2620800AAD724 /* ProviderDashboardVC.swift in Sources */,
+				E69ADBC51EB264C000AAD724 /* PatientSortingRoomVC.swift in Sources */,
+				E614697A1EAFA0CF00005B29 /* CallWebService.swift in Sources */,
+				E69ADBC91EB3C35700AAD724 /* VisitsViewCell.swift in Sources */,
+				E61469351EAE778900005B29 /* AppDelegate.swift in Sources */,
+				E69ADBC11EB1232400AAD724 /* DataModel.swift in Sources */,
+				E69ADBC71EB264F000AAD724 /* SafetyManagerDashboardVC.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E61469411EAE778900005B29 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E614694A1EAE778900005B29 /* TelemedTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E614694C1EAE778900005B29 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E61469551EAE778900005B29 /* TelemedUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		E61469471EAE778900005B29 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E61469301EAE778900005B29 /* Telemed */;
+			targetProxy = E61469461EAE778900005B29 /* PBXContainerItemProxy */;
+		};
+		E61469521EAE778900005B29 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E61469301EAE778900005B29 /* Telemed */;
+			targetProxy = E61469511EAE778900005B29 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		E61469381EAE778900005B29 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E61469391EAE778900005B29 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		E614693D1EAE778900005B29 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E614693E1EAE778900005B29 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		E61469571EAE778900005B29 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		E61469581EAE778900005B29 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		E614695A1EAE778900005B29 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = BB558B2BF874410E8F2DF833 /* Pods-Telemed.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Telemed/Telemed.entitlements;
+				DEVELOPMENT_TEAM = FPPC33KLR7;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Pods/QuickBlox",
+					"$(PROJECT_DIR)/Pods/Quickblox-WebRTC",
+				);
+				INFOPLIST_FILE = Telemed/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = app.caduceususa.com.Telemed;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		E614695B1EAE778900005B29 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4BB9639369A62AC514C69AF0 /* Pods-Telemed.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Telemed/Telemed.entitlements;
+				DEVELOPMENT_TEAM = FPPC33KLR7;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Pods/QuickBlox",
+					"$(PROJECT_DIR)/Pods/Quickblox-WebRTC",
+				);
+				INFOPLIST_FILE = Telemed/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = app.caduceususa.com.Telemed;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
+		E614695D1EAE778900005B29 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3CB4926347205DBE66FA7BAA /* Pods-TelemedTests.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = FPPC33KLR7;
+				INFOPLIST_FILE = TelemedTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = app.caduceususa.com.TelemedTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Telemed.app/Telemed";
+			};
+			name = Debug;
+		};
+		E614695E1EAE778900005B29 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 142BFDC7B431FB3B6D996389 /* Pods-TelemedTests.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = FPPC33KLR7;
+				INFOPLIST_FILE = TelemedTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = app.caduceususa.com.TelemedTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Telemed.app/Telemed";
+			};
+			name = Release;
+		};
+		E61469601EAE778900005B29 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2B79E6CD6F318E351F7A0C9B /* Pods-TelemedUITests.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				DEVELOPMENT_TEAM = FPPC33KLR7;
+				INFOPLIST_FILE = TelemedUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = app.caduceususa.com.TelemedUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_TARGET_NAME = Telemed;
+			};
+			name = Debug;
+		};
+		E61469611EAE778900005B29 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 221F5048BC46C208710214ED /* Pods-TelemedUITests.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				DEVELOPMENT_TEAM = FPPC33KLR7;
+				INFOPLIST_FILE = TelemedUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = app.caduceususa.com.TelemedUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_TARGET_NAME = Telemed;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		E614692C1EAE778900005B29 /* Build configuration list for PBXProject "Telemed" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E61469571EAE778900005B29 /* Debug */,
+				E61469581EAE778900005B29 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E61469591EAE778900005B29 /* Build configuration list for PBXNativeTarget "Telemed" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E614695A1EAE778900005B29 /* Debug */,
+				E614695B1EAE778900005B29 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E614695C1EAE778900005B29 /* Build configuration list for PBXNativeTarget "TelemedTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E614695D1EAE778900005B29 /* Debug */,
+				E614695E1EAE778900005B29 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E614695F1EAE778900005B29 /* Build configuration list for PBXNativeTarget "TelemedUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E61469601EAE778900005B29 /* Debug */,
+				E61469611EAE778900005B29 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = E61469291EAE778900005B29 /* Project object */;
+}
