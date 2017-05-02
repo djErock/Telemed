@@ -82,8 +82,6 @@ class LoginVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        username.text = "eg@marta.com"
-        password.text = "teamwork1"
         validationBox.textAlignment = .center
         validationBox.text = ""
     }
