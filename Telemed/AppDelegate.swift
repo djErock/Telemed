@@ -19,10 +19,10 @@ import QuickbloxWebRTC
 import Fabric
 import Crashlytics
 
-let kQBApplicationID:UInt = 5
-let kQBAuthKey = "ucYFVeFnKyxSNgj"
-let kQBAuthSecret = "qXtVhw658vcL5XM"
-let kQBAccountKey = "9phyMKc9HpqTutF2bfaq"
+let kQBApplicationID:UInt = 12345
+let kQBAuthKey = "wefwef"
+let kQBAuthSecret = "wfefwef"
+let kQBAccountKey = "wfefwefwe"
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -67,7 +67,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         QBSettings.setAccountKey(kQBAccountKey)
         
         // Set settings for zone
-        QBSettings.setApiEndpoint("https://apicaduceustelemed.quickblox.com", chatEndpoint: "chatcaduceustelemed.quickblox.com", forServiceZone: .production)
+        QBSettings.setApiEndpoint("https://api.quickblox.com", chatEndpoint: "chat.quickblox.com", forServiceZone: .production)
         // Activate zone
         QBSettings.setServiceZone(.production)
         
