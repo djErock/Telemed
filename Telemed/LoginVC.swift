@@ -107,8 +107,8 @@ class LoginVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         DataModel.sharedInstance.destroySessionSaveLogin()
-        username.text = "eg@marta.com"
-        password.text = "teamwork1"
+        username.text = DataModel.sharedInstance.sessionInfo.email
+        password.text = DataModel.sharedInstance.sessionInfo.password
         validationBox.textAlignment = .center
         validationBox.text = ""
         username.becomeFirstResponder()
