@@ -7,102 +7,238 @@
 //
 
 import UIKit
-import Firebase
+import FirebaseAnalytics
+import FirebaseInstanceID
+import FirebaseMessaging
 import UserNotifications
 import SystemConfiguration
 import MobileCoreServices
 import Quickblox
 import QuickbloxWebRTC
 
+import Fabric
+import Crashlytics
+
+let kQBApplicationID:UInt = 5
+let kQBAuthKey = "ucYFVeFnKyxSNgj"
+let kQBAuthSecret = "qXtVhw658vcL5XM"
+let kQBAccountKey = "9phyMKc9HpqTutF2bfaq"
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
+    
     var window: UIWindow?
-
-
+    let gcmMessageIDKey = "gcm.message_id"
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        FIRApp.configure()
+        
+        // [START register_for_notifications]
+        
+        FirebaseApp.configure()
+        
+        Messaging.messaging().delegate = self
+        Messaging.messaging().shouldEstablishDirectChannel = true
+        
+        if #available(iOS 10.0, *) {
+            // For iOS 10 display notification (sent via APNS)
+            UNUserNotificationCenter.current().delegate = self
+            
+            let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
+            UNUserNotificationCenter.current().requestAuthorization( options: authOptions, completionHandler: {_, _ in })
+        } else {
+            let settings: UIUserNotificationSettings = UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
+            application.registerUserNotificationSettings(settings)
+        }
+        
+        application.registerForRemoteNotifications()
+        
+        if (Messaging.messaging().fcmToken != nil) {
+            DataModel.sharedInstance.sessionInfo.FirebaseAccessToken = Messaging.messaging().fcmToken!
+            print("<-----------------<<< FCM token: \(DataModel.sharedInstance.sessionInfo.FirebaseAccessToken)")
+        }else {
+            print("<-----------------<<< token was nil")
+        }
+        // [END register_for_notifications]
         
         //Quickblox config
-        QBSettings.setApplicationID(5)
-        QBSettings.setAuthKey("ucYFVeFnKyxSNgj")
-        QBSettings.setAuthSecret("qXtVhw658vcL5XM")
-        QBSettings.setAccountKey("9phyMKc9HpqTutF2bfaq")
-        //QBSettings.apiEndpoint("https://apicaduceustelemed.quickblox.com", chatEndpoint: "chatcaduceustelemed.quickblox.com", forServiceZone: QBConnectionZoneTypeProduction)
+        QBSettings.setApplicationID(kQBApplicationID)
+        QBSettings.setAuthKey(kQBAuthKey)
+        QBSettings.setAuthSecret(kQBAuthSecret)
+        QBSettings.setAccountKey(kQBAccountKey)
         
         // Set settings for zone
-        // QBSettings.setApiEndpoint("https://apicaduceustelemed.quickblox.com", chatEndpoint: "chatcaduceustelemed.quickblox.com", forServiceZone: QBConnectionZoneTypeProduction)
+        QBSettings.setApiEndpoint("https://apicaduceustelemed.quickblox.com", chatEndpoint: "chatcaduceustelemed.quickblox.com", forServiceZone: .production)
         // Activate zone
-        // QBSettings.serviceZone = QBConnectionZoneTypeProduction
+        QBSettings.setServiceZone(.production)
         
-        
-        // iOS 10 support
-        if #available(iOS 10, *) {
-            UNUserNotificationCenter.current().requestAuthorization(options:[.badge, .alert, .sound]){ (granted, error) in }
-            application.registerForRemoteNotifications()
-        }
-            // iOS 9 support
-        else if #available(iOS 9, *) {
-            UIApplication.shared.registerUserNotificationSettings(UIUserNotificationSettings(types: [.badge, .sound, .alert], categories: nil))
-            UIApplication.shared.registerForRemoteNotifications()
-        }
-            // iOS 8 support
-        else if #available(iOS 8, *) {
-            UIApplication.shared.registerUserNotificationSettings(UIUserNotificationSettings(types: [.badge, .sound, .alert], categories: nil))
-            UIApplication.shared.registerForRemoteNotifications()
-        }
-            // iOS 7 support
-        else {  
-            application.registerForRemoteNotifications(matching: [.badge, .sound, .alert])
-        }
+        QBSettings.setKeepAliveInterval(30)
+        QBSettings.setAutoReconnectEnabled(true)
+        QBRTCConfig.setStatsReportTimeInterval(1)
+        QBRTCConfig.setDialingTimeInterval(5)
+        QBRTCConfig.setAnswerTimeInterval(60)
         
         return true
     }
 
+    // [START receive_message]
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any]) {
+        print("<-----------------<<< didReceiveRemoteNotification 1")
+        Messaging.messaging().appDidReceiveMessage(userInfo)
+        
+        if let messageID = userInfo[gcmMessageIDKey] {
+            print("<-----------------<<< Message ID: \(messageID)")
+        }
+        
+        print(userInfo)
+        
+    }
+    
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        print("<-----------------<<< didReceiveRemoteNotification 2")
+        
+        Messaging.messaging().appDidReceiveMessage(userInfo)
+        
+        if let messageID = userInfo[gcmMessageIDKey] {
+            print("<-----------------<<< Message ID: \(messageID)")
+        }
+        
+        print(userInfo)
+        
+        completionHandler(UIBackgroundFetchResult.newData)
+        
+    }
+    
+    
+    // when APNs has assigned the device a unique token
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        print("<-----------------<<< didRegisterForRemoteNotificationsWithDeviceToken()")
+        
+        Messaging.messaging().apnsToken = deviceToken
+        
+        //Messaging.messaging().setAPNSToken(deviceToken, type: MessagingAPNSTokenType.sandbox)
+        //Messaging.messaging().setAPNSToken(deviceToken, type: MessagingAPNSTokenType.prod)
+        //Messaging.messaging().setAPNSToken(deviceToken, type: MessagingAPNSTokenType.unknown)
+        
+        let deviceTokenString = deviceToken.reduce("", {$0 + String(format: "%02X", $1)})
+        DataModel.sharedInstance.sessionInfo.APNSAccessToken = deviceTokenString
+        print("<-----------------<<< APNS Access Token: \(deviceTokenString)")
+        
+    }
+ 
+ 
+    // [END receive_message]
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        print("<-----------------<<< Unable to register for remote notifications: \(error.localizedDescription)")
+    }
+    
+    
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
-        // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-        // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+        print("<-----------------<<< applicationDidEnterBackground")
+        QBChat.instance().disconnect { (error) in
+            if error != nil {
+                print("error: \(String(describing: error))")
+            } else {
+                print("success for applicationDidEnterBackground")
+            }
+        }
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
-        // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
+        print("<-----------------<<< applicationWillEnterForeground")
+        let qbUser = QBUUser()
+        qbUser.id = DataModel.sharedInstance.qbLoginParams.id
+        qbUser.password = DataModel.sharedInstance.sessionInfo.QBPassword
+        QBChat.instance().connect(with: qbUser) { (error) in
+            if error != nil {
+                print("error: \(String(describing: error))")
+            } else {
+                print("success for applicationWillEnterForeground")
+            }
+        }
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
+        print("<-----------------<<< applicationDidBecomeActive")
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
-        // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+        print("<-----------------<<< applicationWillTerminate")
+        QBChat.instance().disconnect { (error) in
+            if error != nil {
+                print("error: \(String(describing: error))")
+            } else {
+                print("success for applicationWillTerminate")
+            }
+        }
     }
     
-    // Called when APNs has assigned the device a unique token
-    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        // Convert token to string
-        let deviceTokenString = deviceToken.reduce("", {$0 + String(format: "%02X", $1)})
-        DataModel.sharedInstance.sessionInfo.FirebaseAccessToken = deviceTokenString
-        // Print it to console
-        print("APNs device token: \(deviceTokenString)")
+    // LOCK IN PORTRAIT MODE
+    func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
+        return UIInterfaceOrientationMask(rawValue: UIInterfaceOrientationMask.portrait.rawValue)
+    }
+
+}
+
+// [START ios_10_message_handling]
+@available(iOS 10, *)
+extension AppDelegate : UNUserNotificationCenterDelegate {
+    
+    // Receive displayed notifications for iOS 10 devices.
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        print("<-----------------<<< willPresent userNotificationCenter")
+        let userInfo = notification.request.content.userInfo
         
-        // Persist it in your backend in case it's new
+        // With swizzling disabled you must let Messaging know about the message, for Analytics
+        Messaging.messaging().appDidReceiveMessage(userInfo)
+        // Print message ID.
+        if let messageID = userInfo[gcmMessageIDKey] {
+            print("Message ID: \(messageID)")
+        }
+        
+        // Print full message.
+        print(userInfo)
+        
+        // Change this to your preferred presentation option
+        completionHandler([])
     }
     
-    // Called when APNs failed to register the device for push notifications
-    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
-        // Print the error to console (you should alert the user that registration failed)
-        print("APNs registration failed: \(error)")
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        print("<-----------------<<< didReceive userNotificationCenter")
+        let userInfo = response.notification.request.content.userInfo
+        // Print message ID.
+        if let messageID = userInfo[gcmMessageIDKey] {
+            print("Message ID: \(messageID)")
+        }
+        
+        // Print full message.
+        print(userInfo)
+        
+        completionHandler()
     }
+}
+// [END ios_10_message_handling]
 
-    // Push notification received
-    func application(_ application: UIApplication, didReceiveRemoteNotification data: [AnyHashable : Any]) {
-        // Print notification payload data
-        print("Push notification received: \(data)")
+extension AppDelegate : MessagingDelegate {
+    // [START refresh_token]
+    func messaging(_ messaging: Messaging, didRefreshRegistrationToken fcmToken: String) {
+        print("<-----------------<<< didRefreshRegistrationToken")
+        DataModel.sharedInstance.sessionInfo.FirebaseAccessToken = fcmToken
+        print("Firebase registration token: \(fcmToken)")
     }
-
+    // [END refresh_token]
+    // [START ios_10_data_message]
+    // Receive data messages on iOS 10+ directly from FCM (bypassing APNs) when the app is in the foreground.
+    // To enable direct data messages, you can set Messaging.messaging().shouldEstablishDirectChannel to true.
+    func messaging(_ messaging: Messaging, didReceive remoteMessage: MessagingRemoteMessage) {
+        print("<-----------------<<< didReceive remoteMessage")
+        print("Received data message: \(remoteMessage.appData)")
+    }
+    // [END ios_10_data_message]
 }
 
