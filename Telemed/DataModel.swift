@@ -112,6 +112,7 @@ class DataModel {
                         print("INVALID KEY <----------------------------<<<<<< " + wsURLPath)
                         print(parsedJSON)
                     }
+                    print(String(describing:response))
                     DispatchQueue.main.async { completion(response) }
                 }
             } catch let error {

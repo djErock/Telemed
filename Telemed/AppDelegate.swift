@@ -7,17 +7,14 @@
 //
 
 import UIKit
-import FirebaseAnalytics
+import UserNotifications
+import Firebase
 import FirebaseInstanceID
 import FirebaseMessaging
-import UserNotifications
 import SystemConfiguration
 import MobileCoreServices
 import Quickblox
 import QuickbloxWebRTC
-
-import Fabric
-import Crashlytics
 
 let kQBApplicationID:UInt = 5
 let kQBAuthKey = "ucYFVeFnKyxSNgj"
@@ -31,6 +28,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let gcmMessageIDKey = "gcm.message_id"
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        
+        // [ START Quickblox config ]
+        QBSettings.setApplicationID(kQBApplicationID)
+        QBSettings.setAuthKey(kQBAuthKey)
+        QBSettings.setAuthSecret(kQBAuthSecret)
+        QBSettings.setAccountKey(kQBAccountKey)
+        QBSettings.setApiEndpoint("https://apicaduceustelemed.quickblox.com", chatEndpoint: "chatcaduceustelemed.quickblox.com", forServiceZone: .production)
+        QBSettings.setServiceZone(.production)
+        QBSettings.setKeepAliveInterval(30)
+        QBSettings.setAutoReconnectEnabled(true)
+        QBRTCConfig.setStatsReportTimeInterval(1)
+        QBRTCConfig.setDialingTimeInterval(5)
+        QBRTCConfig.setAnswerTimeInterval(60)
+        // [ END Quickblox config ]
         
         // [START register_for_notifications]
         
@@ -60,26 +71,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         // [END register_for_notifications]
         
-        //Quickblox config
-        QBSettings.setApplicationID(kQBApplicationID)
-        QBSettings.setAuthKey(kQBAuthKey)
-        QBSettings.setAuthSecret(kQBAuthSecret)
-        QBSettings.setAccountKey(kQBAccountKey)
-        
-        // Set settings for zone
-        QBSettings.setApiEndpoint("https://apicaduceustelemed.quickblox.com", chatEndpoint: "chatcaduceustelemed.quickblox.com", forServiceZone: .production)
-        // Activate zone
-        QBSettings.setServiceZone(.production)
-        
-        QBSettings.setKeepAliveInterval(30)
-        QBSettings.setAutoReconnectEnabled(true)
-        QBRTCConfig.setStatsReportTimeInterval(1)
-        QBRTCConfig.setDialingTimeInterval(5)
-        QBRTCConfig.setAnswerTimeInterval(60)
-        
         return true
     }
-
+    
     // [START receive_message]
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any]) {
         print("<-----------------<<< didReceiveRemoteNotification 1")
@@ -111,21 +105,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     // when APNs has assigned the device a unique token
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        print("<-----------------<<< didRegisterForRemoteNotificationsWithDeviceToken()")
         
+        let APNStoken = deviceToken.map { String(format: "%02.2hhx", $0) }.joined()
+        print("Received an APNs device token: \(APNStoken)")
+        DataModel.sharedInstance.sessionInfo.APNSAccessToken = APNStoken
         Messaging.messaging().apnsToken = deviceToken
         
-        //Messaging.messaging().setAPNSToken(deviceToken, type: MessagingAPNSTokenType.sandbox)
-        //Messaging.messaging().setAPNSToken(deviceToken, type: MessagingAPNSTokenType.prod)
-        //Messaging.messaging().setAPNSToken(deviceToken, type: MessagingAPNSTokenType.unknown)
-        
-        let deviceTokenString = deviceToken.reduce("", {$0 + String(format: "%02X", $1)})
-        DataModel.sharedInstance.sessionInfo.APNSAccessToken = deviceTokenString
-        print("<-----------------<<< APNS Access Token: \(deviceTokenString)")
-        
     }
- 
- 
+    
+    
     // [END receive_message]
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         print("<-----------------<<< Unable to register for remote notifications: \(error.localizedDescription)")
@@ -136,7 +124,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
     }
-
+    
     func applicationDidEnterBackground(_ application: UIApplication) {
         print("<-----------------<<< applicationDidEnterBackground")
         QBChat.instance().disconnect { (error) in
@@ -147,7 +135,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
-
+    
     func applicationWillEnterForeground(_ application: UIApplication) {
         print("<-----------------<<< applicationWillEnterForeground")
         let qbUser = QBUUser()
@@ -161,12 +149,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
-
+    
     func applicationDidBecomeActive(_ application: UIApplication) {
         print("<-----------------<<< applicationDidBecomeActive")
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     }
-
+    
     func applicationWillTerminate(_ application: UIApplication) {
         print("<-----------------<<< applicationWillTerminate")
         QBChat.instance().disconnect { (error) in
@@ -182,7 +170,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
         return UIInterfaceOrientationMask(rawValue: UIInterfaceOrientationMask.portrait.rawValue)
     }
-
+    
 }
 
 // [START ios_10_message_handling]
@@ -191,7 +179,6 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
     
     // Receive displayed notifications for iOS 10 devices.
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        print("<-----------------<<< willPresent userNotificationCenter")
         let userInfo = notification.request.content.userInfo
         
         // With swizzling disabled you must let Messaging know about the message, for Analytics
@@ -205,11 +192,10 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
         print(userInfo)
         
         // Change this to your preferred presentation option
-        completionHandler([])
+        completionHandler([.alert, .badge, .sound])
     }
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-        print("<-----------------<<< didReceive userNotificationCenter")
         let userInfo = response.notification.request.content.userInfo
         // Print message ID.
         if let messageID = userInfo[gcmMessageIDKey] {
@@ -227,8 +213,6 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
 extension AppDelegate : MessagingDelegate {
     // [START refresh_token]
     func messaging(_ messaging: Messaging, didRefreshRegistrationToken fcmToken: String) {
-        print("<-----------------<<< didRefreshRegistrationToken")
-        DataModel.sharedInstance.sessionInfo.FirebaseAccessToken = fcmToken
         print("Firebase registration token: \(fcmToken)")
     }
     // [END refresh_token]
@@ -236,7 +220,6 @@ extension AppDelegate : MessagingDelegate {
     // Receive data messages on iOS 10+ directly from FCM (bypassing APNs) when the app is in the foreground.
     // To enable direct data messages, you can set Messaging.messaging().shouldEstablishDirectChannel to true.
     func messaging(_ messaging: Messaging, didReceive remoteMessage: MessagingRemoteMessage) {
-        print("<-----------------<<< didReceive remoteMessage")
         print("Received data message: \(remoteMessage.appData)")
     }
     // [END ios_10_data_message]

@@ -25,6 +25,8 @@
 		E614697C1EAFD01100005B29 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E614697B1EAFD01100005B29 /* GoogleService-Info.plist */; };
 		E614697E1EB0EC4B00005B29 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E614697D1EB0EC4B00005B29 /* UserNotifications.framework */; };
 		E61AC7711ECCCF92005D5960 /* CreditCardsViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61AC7701ECCCF92005D5960 /* CreditCardsViewCell.swift */; };
+		E6318C361EE1F57E00376A45 /* AppAuthenticationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6318C351EE1F57E00376A45 /* AppAuthenticationVC.swift */; };
+		E6318C381EE1F67B00376A45 /* updateRequiredVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6318C371EE1F67B00376A45 /* updateRequiredVC.swift */; };
 		E63E303B1ED4ED1800EF6816 /* CreditCardVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63E303A1ED4ED1800EF6816 /* CreditCardVC.swift */; };
 		E67BBC1F1EB7917700C6D39D /* PatientTelemedVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67BBC1D1EB7917700C6D39D /* PatientTelemedVC.swift */; };
 		E67BBC201EB7917700C6D39D /* PatientTelemedVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = E67BBC1E1EB7917700C6D39D /* PatientTelemedVC.xib */; };
@@ -115,6 +117,8 @@
 		E614697B1EAFD01100005B29 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E614697D1EB0EC4B00005B29 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		E61AC7701ECCCF92005D5960 /* CreditCardsViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreditCardsViewCell.swift; sourceTree = "<group>"; };
+		E6318C351EE1F57E00376A45 /* AppAuthenticationVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppAuthenticationVC.swift; sourceTree = "<group>"; };
+		E6318C371EE1F67B00376A45 /* updateRequiredVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = updateRequiredVC.swift; sourceTree = "<group>"; };
 		E63E303A1ED4ED1800EF6816 /* CreditCardVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreditCardVC.swift; sourceTree = "<group>"; };
 		E67BBC1D1EB7917700C6D39D /* PatientTelemedVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatientTelemedVC.swift; sourceTree = "<group>"; };
 		E67BBC1E1EB7917700C6D39D /* PatientTelemedVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PatientTelemedVC.xib; sourceTree = "<group>"; };
@@ -258,6 +262,7 @@
 				E61469631EAE7AA600005B29 /* img */,
 				E61469381EAE778900005B29 /* Main.storyboard */,
 				E61469341EAE778900005B29 /* AppDelegate.swift */,
+				E6318C351EE1F57E00376A45 /* AppAuthenticationVC.swift */,
 				E61469361EAE778900005B29 /* LoginVC.swift */,
 				E69ADBC61EB264F000AAD724 /* SafetyManagerDashboardVC.swift */,
 				E611A09B1ECB8F3000531C15 /* FaceSheetVC.swift */,
@@ -267,6 +272,7 @@
 				E61AC7701ECCCF92005D5960 /* CreditCardsViewCell.swift */,
 				E69ADBC21EB2620800AAD724 /* ProviderDashboardVC.swift */,
 				E69ADBC41EB264C000AAD724 /* PatientSortingRoomVC.swift */,
+				E6318C371EE1F67B00376A45 /* updateRequiredVC.swift */,
 				E614693B1EAE778900005B29 /* Assets.xcassets */,
 				E614693D1EAE778900005B29 /* LaunchScreen.storyboard */,
 				E67BBC1E1EB7917700C6D39D /* PatientTelemedVC.xib */,
@@ -637,10 +643,12 @@
 				E69ADBC31EB2620800AAD724 /* ProviderDashboardVC.swift in Sources */,
 				E611A09C1ECB8F3100531C15 /* FaceSheetVC.swift in Sources */,
 				E69ADBC51EB264C000AAD724 /* PatientSortingRoomVC.swift in Sources */,
+				E6318C381EE1F67B00376A45 /* updateRequiredVC.swift in Sources */,
 				E614697A1EAFA0CF00005B29 /* CallWebService.swift in Sources */,
 				E69ADBC91EB3C35700AAD724 /* VisitsViewCell.swift in Sources */,
 				E61AC7711ECCCF92005D5960 /* CreditCardsViewCell.swift in Sources */,
 				E61469351EAE778900005B29 /* AppDelegate.swift in Sources */,
+				E6318C361EE1F57E00376A45 /* AppAuthenticationVC.swift in Sources */,
 				E69ADBC11EB1232400AAD724 /* DataModel.swift in Sources */,
 				E69ADBC71EB264F000AAD724 /* SafetyManagerDashboardVC.swift in Sources */,
 			);
@@ -806,7 +814,7 @@
 				);
 				INFOPLIST_FILE = Telemed/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = app.caduceususa.com.Telemed;
+				PRODUCT_BUNDLE_IDENTIFIER = com.caduceususa.telemed;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
@@ -827,7 +835,7 @@
 				);
 				INFOPLIST_FILE = Telemed/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = app.caduceususa.com.Telemed;
+				PRODUCT_BUNDLE_IDENTIFIER = com.caduceususa.telemed;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Bridging-Header.h";

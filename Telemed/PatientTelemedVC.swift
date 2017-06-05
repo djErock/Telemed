@@ -162,6 +162,8 @@ class PatientTelemedVC: UIViewController, QBRTCClientDelegate, QBChatDelegate, Q
                                     }
                                 )
                             })
+                        }else if (dialogs!.count != 0 && DataModel.sharedInstance.sessionInfo.Peers.count == 0){
+                            // SEND NOTIFICATION TO DOC THAT ROOM HAS BEEN RE-ENTERED
                         }else {
                             print("waiting for someone to log in and create a chat")
                         }
@@ -348,9 +350,18 @@ class PatientTelemedVC: UIViewController, QBRTCClientDelegate, QBChatDelegate, Q
         if !isExpanded {
             // GO FULL SCREEN
             UIView.animate(withDuration: 0.8, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-                self.videoPlayerViewCenter = self.remoteVideoElement.center
+                
                 self.view.bringSubview(toFront: self.modalShadeBackground)
                 self.view.bringSubview(toFront: self.remoteVideoElement)
+                self.view.bringSubview(toFront: self.localVideoElement)
+                self.videoPlayerViewCenter = self.remoteVideoElement.center
+                
+                self.remoteVideoElement.frame = CGRect(x: 0, y: 0, width: self.view.frame.height, height: self.view.frame.width)
+                self.remoteVideoElement.center = self.view.center
+                self.remoteVideoElement.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi / 2))
+                self.remoteVideoElement.layoutSubviews()
+                
+                /*
                 self.remoteVideoElement.frame = CGRect(x: 0, y: 0, width: self.view.frame.height, height: self.view.frame.width)
                 self.remoteVideoElement.frame = AVMakeRect(aspectRatio: (self.remoteVideoElement.layer.preferredFrameSize()), insideRect: self.remoteVideoElement.frame)
                 self.remoteVideoElement.contentMode = .scaleAspectFit
@@ -358,16 +369,34 @@ class PatientTelemedVC: UIViewController, QBRTCClientDelegate, QBChatDelegate, Q
                 self.remoteVideoElement.center = self.view.center
                 self.remoteVideoElement.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi / 2))
                 self.remoteVideoElement.layoutSubviews()
+                */
             }, completion: nil)
         } else {
             // REVERT BACK TO ORIGINAL CONTRAINTS IN THE LAYOUT
             UIView.animate(withDuration: 0.8, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+                
+                //16 x 9 is the aspect ratio of all HD videos
+                
+                self.remoteVideoElement.transform = CGAffineTransform.identity
+                self.remoteVideoElement.center = self.videoPlayerViewCenter
+                
+                let height = self.view.frame.width * 9 / 16
+                let videoPlayerFrame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: height)
+                self.remoteVideoElement.frame = videoPlayerFrame
+                
+                self.remoteVideoElement.layoutSubviews()
+                self.view.sendSubview(toBack: self.remoteVideoElement)
+                self.view.sendSubview(toBack: self.localVideoElement)
+                self.view.sendSubview(toBack: self.modalShadeBackground)
+                
+                /*
                 self.remoteVideoElement.transform = CGAffineTransform.identity
                 self.remoteVideoElement.center = self.videoPlayerViewCenter
                 self.view.sendSubview(toBack: self.remoteVideoElement)
                 self.view.sendSubview(toBack: self.modalShadeBackground)
                 self.remoteVideoElement.frame = AVMakeRect(aspectRatio: (self.remoteVideoElement.layer.preferredFrameSize()), insideRect: self.remoteVideoElement.frame)
                 self.remoteVideoElement.layoutSubviews()
+                */
             }, completion: nil)
         }
         isExpanded = !isExpanded

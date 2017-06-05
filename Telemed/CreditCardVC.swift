@@ -374,6 +374,11 @@ class CreditCardVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSour
         
     }
     
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return false
+    }
+    
     func chkStrForNums(string: String) -> Bool {
         return string.rangeOfCharacter(from: NSCharacterSet.decimalDigits.inverted) == nil
     }

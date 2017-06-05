@@ -48,7 +48,12 @@ class LoginVC: UIViewController {
             wsURLPath: "telemed.asmx/telemedLogin",
             completion: {(response: NSDictionary) -> Void in
                 self.testWSResponse(response)
-                DataModel.sharedInstance.sessionInfo.SessionKey = response.value(forKey: "key") as! String
+                let sessionKey = response.value(forKey: "key") as! String
+                if (sessionKey.characters.count != 50) {
+                    self.validationBox.text = response.value(forKey: "message") as? String
+                    return
+                }
+                DataModel.sharedInstance.sessionInfo.SessionKey = sessionKey
                 DataModel.sharedInstance.accessNetworkDataObject(
                     params: [
                         "sKey": DataModel.sharedInstance.sessionInfo.SessionKey
@@ -107,8 +112,8 @@ class LoginVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         DataModel.sharedInstance.destroySessionSaveLogin()
-        username.text = "eg@marta.com"
-        password.text = "teamwork1"
+        username.text = DataModel.sharedInstance.sessionInfo.Email
+        password.text = DataModel.sharedInstance.sessionInfo.Password
         validationBox.textAlignment = .center
         validationBox.text = ""
         username.becomeFirstResponder()
