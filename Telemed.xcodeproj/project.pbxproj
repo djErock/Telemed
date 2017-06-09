@@ -41,10 +41,9 @@
 		E67BBC381EB7C2FB00C6D39D /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E67BBC371EB7C2FB00C6D39D /* SystemConfiguration.framework */; };
 		E67BBC3A1EB7C30800C6D39D /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E67BBC391EB7C30800C6D39D /* VideoToolbox.framework */; };
 		E67BBC3C1EB7C31800C6D39D /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E67BBC3B1EB7C31800C6D39D /* Accelerate.framework */; };
-		E67BBC3E1EB7C41700C6D39D /* Quickblox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E67BBC3D1EB7C41700C6D39D /* Quickblox.framework */; };
-		E67BBC3F1EB7C41700C6D39D /* Quickblox.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E67BBC3D1EB7C41700C6D39D /* Quickblox.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E67BBC421EB7C43100C6D39D /* QuickbloxWebRTC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E67BBC411EB7C43100C6D39D /* QuickbloxWebRTC.framework */; };
 		E67BBC431EB7C43100C6D39D /* QuickbloxWebRTC.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E67BBC411EB7C43100C6D39D /* QuickbloxWebRTC.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E68339601EE9BED500DB15EB /* Quickblox.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E67BBC3D1EB7C41700C6D39D /* Quickblox.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E69ADBC11EB1232400AAD724 /* DataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69ADBC01EB1232400AAD724 /* DataModel.swift */; };
 		E69ADBC31EB2620800AAD724 /* ProviderDashboardVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69ADBC21EB2620800AAD724 /* ProviderDashboardVC.swift */; };
 		E69ADBC51EB264C000AAD724 /* PatientSortingRoomVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69ADBC41EB264C000AAD724 /* PatientSortingRoomVC.swift */; };
@@ -77,8 +76,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				E68339601EE9BED500DB15EB /* Quickblox.framework in Embed Frameworks */,
 				E67BBC431EB7C43100C6D39D /* QuickbloxWebRTC.framework in Embed Frameworks */,
-				E67BBC3F1EB7C41700C6D39D /* Quickblox.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -167,7 +166,6 @@
 				E67BBC241EB7C25C00C6D39D /* libicucore.tbd in Frameworks */,
 				E614697E1EB0EC4B00005B29 /* UserNotifications.framework in Frameworks */,
 				D4466B15A1E8E675D679EEC3 /* Pods_Telemed.framework in Frameworks */,
-				E67BBC3E1EB7C41700C6D39D /* Quickblox.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -813,6 +811,7 @@
 					"$(PROJECT_DIR)/Pods/Quickblox-WebRTC",
 				);
 				INFOPLIST_FILE = Telemed/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.caduceususa.telemed;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -834,6 +833,7 @@
 					"$(PROJECT_DIR)/Pods/Quickblox-WebRTC",
 				);
 				INFOPLIST_FILE = Telemed/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.caduceususa.telemed;
 				PRODUCT_NAME = "$(TARGET_NAME)";

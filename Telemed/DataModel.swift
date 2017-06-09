@@ -80,17 +80,17 @@ class DataModel {
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         let task = session.dataTask(with: request as URLRequest, completionHandler: { data, response, error in
-            
             guard error == nil else {
                 print("WEB SERVICE ERROR <----------------------------<<<<<< " + wsURLPath)
                 print(error!)
+                let resp: [String: String] = [ "conn": "failed" ]
+                DispatchQueue.main.async { completion(resp as NSDictionary) }
                 return
             }
             guard let data = data else {
                 print("WEB SERVICE ERROR <----------------------------<<<<<< " + wsURLPath)
                 return
             }
-            
             let status = (response as! HTTPURLResponse).statusCode
             if status == 500 {
                 print(type(of: data))
@@ -132,10 +132,11 @@ class DataModel {
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         let task = session.dataTask(with: request as URLRequest, completionHandler: { data, response, error in
-            
             guard error == nil else {
                 print("WEB SERVICE ERROR <----------------------------<<<<<< " + wsURLPath)
                 print(error!)
+                let resp: [[String: String]] = [ ["conn": "failed"] ]
+                DispatchQueue.main.async { completion(resp as NSArray) }
                 return
             }
             guard let data = data else {

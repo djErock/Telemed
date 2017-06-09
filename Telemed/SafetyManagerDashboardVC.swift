@@ -34,7 +34,11 @@ class SafetyManagerDashboardVC: UIViewController, UITableViewDataSource, UITable
         visitsView.dataSource = self
         DataModel.sharedInstance.sessionInfo.VisitID = 0
         
-        visitsView.refreshControl = self.refreshVisits
+        if #available(iOS 10.0, *) {
+            visitsView.refreshControl = self.refreshVisits
+        } else {
+            //visitsView.refreshControl
+        }
         self.refreshVisits.attributedTitle = NSAttributedString(string: "Pull to refresh")
         self.refreshVisits.addTarget(self, action: #selector(SafetyManagerDashboardVC.refreshVisitList), for: .valueChanged)
         
@@ -59,7 +63,15 @@ class SafetyManagerDashboardVC: UIViewController, UITableViewDataSource, UITable
             ],
             wsURLPath: "Util.asmx/returnActiveVisits",
             completion: {(visits: NSArray) -> Void in
-                self.testWSResponse(visits)
+                if (!self.testWSResponse(visits)) {
+                    let alertController = UIAlertController(title: "Title", message: "This app is experiencing connectivity issues. Please check your internet connection. If the problem persists, please contact a Caduceus IT professional to help sort out the problems, Thanks.", preferredStyle: UIAlertControllerStyle.alert)
+                    alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { UIAlertAction in
+                        self.viewDidLoad()
+                        self.viewWillAppear(true)
+                    })
+                    self.present(alertController, animated: true, completion: nil)
+                    return
+                }
                 self.PatientNameArray.removeAll()
                 self.DateAndTimeOfInjuryArray.removeAll()
                 self.CompanyArray.removeAll()
@@ -192,7 +204,15 @@ class SafetyManagerDashboardVC: UIViewController, UITableViewDataSource, UITable
                         ],
                         wsURLPath: "Telemed.asmx/updateQbUser",
                         completion: {(response: NSDictionary) -> Void in
-                            self.testWSResponse(response)
+                            if (!self.testWSResponse(response)) {
+                                let alertController = UIAlertController(title: "Title", message: "This app is experiencing connectivity issues. Please check your internet connection. If the problem persists, please contact a Caduceus IT professional to help sort out the problems, Thanks.", preferredStyle: UIAlertControllerStyle.alert)
+                                alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { UIAlertAction in
+                                    self.viewDidLoad()
+                                    self.viewWillAppear(true)
+                                })
+                                self.present(alertController, animated: true, completion: nil)
+                                return
+                            }
                             DispatchQueue.main.async {
                                 self.performSegue(withIdentifier: "SendPatientToExamRoom", sender: self.VisitIDArray[indexPath.row])
                             }
@@ -235,24 +255,34 @@ class SafetyManagerDashboardVC: UIViewController, UITableViewDataSource, UITable
         })
     }
     
-    func testWSResponse(_ response: AnyObject) {
+    func testWSResponse(_ response: AnyObject) -> Bool {
+        var returnResponse = Bool()
+        guard response["conn"] != nil else {
+            print("CONN == nil <----------------------------<<<<<< ")
+            return false
+        }
         if response is NSArray {
             if (response.count == 0) {
-                print("Got zero Array results")
                 let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "LoginVC") as! LoginVC
+                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "AppAuthenticate") as! AppAuthenticationVC
                 self.present(nextViewController, animated:true, completion:nil)
-                return
+                print("Got zero Array results")
+                returnResponse = false
+            }else {
+                returnResponse = true
             }
         }else if response is NSDictionary {
             if (response.allValues.isEmpty) {
-                print("Got zero Dictionary results")
                 let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "LoginVC") as! LoginVC
+                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "AppAuthenticate") as! AppAuthenticationVC
                 self.present(nextViewController, animated:true, completion:nil)
-                return
+                print("Got zero Dictionary results")
+                returnResponse = false
+            }else {
+                returnResponse = true
             }
         }
+        return returnResponse
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

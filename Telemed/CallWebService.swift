@@ -231,6 +231,7 @@ class CallWebService {
             guard error == nil else {
                 print("WEB SERVICE ERROR <----------------------------<<<<<< creditCard")
                 print(error!)
+                
                 return
             }
             guard let data = data else { return }

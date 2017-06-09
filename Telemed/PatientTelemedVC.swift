@@ -32,7 +32,7 @@ class PatientTelemedVC: UIViewController, QBRTCClientDelegate, QBChatDelegate, Q
     @IBOutlet weak var CallControls: UIView!
     @IBOutlet weak var CallControlsVerticalConstraint: NSLayoutConstraint!
     
-    @IBOutlet weak var modalShadeBackground: UIView!
+    //@IBOutlet weak var modalShadeBackground: UIView!
     
     @IBOutlet weak var BackToDash: UIBarButtonItem!
     
@@ -351,7 +351,7 @@ class PatientTelemedVC: UIViewController, QBRTCClientDelegate, QBChatDelegate, Q
             // GO FULL SCREEN
             UIView.animate(withDuration: 0.8, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
                 
-                self.view.bringSubview(toFront: self.modalShadeBackground)
+                //self.view.bringSubview(toFront: self.modalShadeBackground)
                 self.view.bringSubview(toFront: self.remoteVideoElement)
                 self.view.bringSubview(toFront: self.localVideoElement)
                 self.videoPlayerViewCenter = self.remoteVideoElement.center
@@ -387,7 +387,7 @@ class PatientTelemedVC: UIViewController, QBRTCClientDelegate, QBChatDelegate, Q
                 self.remoteVideoElement.layoutSubviews()
                 self.view.sendSubview(toBack: self.remoteVideoElement)
                 self.view.sendSubview(toBack: self.localVideoElement)
-                self.view.sendSubview(toBack: self.modalShadeBackground)
+                //self.view.sendSubview(toBack: self.modalShadeBackground)
                 
                 /*
                 self.remoteVideoElement.transform = CGAffineTransform.identity
@@ -567,8 +567,8 @@ class PatientTelemedVC: UIViewController, QBRTCClientDelegate, QBChatDelegate, Q
         UIView.animate(
             withDuration: 0.35,
             animations: {
-                self.modalShadeBackground.alpha = 0.8
-                self.view.bringSubview(toFront: self.modalShadeBackground)
+                //self.modalShadeBackground.alpha = 0.8
+                //self.view.bringSubview(toFront: self.modalShadeBackground)
             }
         )
         UIView.animate(
@@ -584,8 +584,8 @@ class PatientTelemedVC: UIViewController, QBRTCClientDelegate, QBChatDelegate, Q
         UIView.animate(
             withDuration: 0.35,
             animations: {
-                self.modalShadeBackground.alpha = 0
-                self.view.sendSubview(toBack: self.modalShadeBackground)
+                //self.modalShadeBackground.alpha = 0
+                //self.view.sendSubview(toBack: self.modalShadeBackground)
         }
         )
         UIView.animate(
@@ -597,24 +597,34 @@ class PatientTelemedVC: UIViewController, QBRTCClientDelegate, QBChatDelegate, Q
         )
     }
     
-    func testWSResponse(_ response: AnyObject) {
+    func testWSResponse(_ response: AnyObject) -> Bool {
+        var returnResponse = Bool()
+        guard response["conn"] != nil else {
+            print("CONN == nil <----------------------------<<<<<< ")
+            return false
+        }
         if response is NSArray {
             if (response.count == 0) {
-                print("Got zero Array results")
                 let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "LoginVC") as! LoginVC
+                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "AppAuthenticate") as! AppAuthenticationVC
                 self.present(nextViewController, animated:true, completion:nil)
-                return
+                print("Got zero Array results")
+                returnResponse = false
+            }else {
+                returnResponse = true
             }
         }else if response is NSDictionary {
             if (response.allValues.isEmpty) {
-                print("Got zero Dictionary results")
                 let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "LoginVC") as! LoginVC
+                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "AppAuthenticate") as! AppAuthenticationVC
                 self.present(nextViewController, animated:true, completion:nil)
-                return
+                print("Got zero Dictionary results")
+                returnResponse = false
+            }else {
+                returnResponse = true
             }
         }
+        return returnResponse
     }
     
 }

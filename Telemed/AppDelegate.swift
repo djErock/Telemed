@@ -214,6 +214,7 @@ extension AppDelegate : MessagingDelegate {
     // [START refresh_token]
     func messaging(_ messaging: Messaging, didRefreshRegistrationToken fcmToken: String) {
         print("Firebase registration token: \(fcmToken)")
+        DataModel.sharedInstance.sessionInfo.FirebaseAccessToken = fcmToken
     }
     // [END refresh_token]
     // [START ios_10_data_message]

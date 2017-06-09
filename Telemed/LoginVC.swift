@@ -47,7 +47,15 @@ class LoginVC: UIViewController {
             ],
             wsURLPath: "telemed.asmx/telemedLogin",
             completion: {(response: NSDictionary) -> Void in
-                self.testWSResponse(response)
+                if (!self.testWSResponse(response)) {
+                    let alertController = UIAlertController(title: "Title", message: "This app is experiencing connectivity issues. Please check your internet connection. If the problem persists, please contact a Caduceus IT professional to help sort out the problems, Thanks.", preferredStyle: UIAlertControllerStyle.alert)
+                    alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { UIAlertAction in
+                        self.viewDidLoad()
+                        self.viewWillAppear(true)
+                    })
+                    self.present(alertController, animated: true, completion: nil)
+                    return
+                }
                 let sessionKey = response.value(forKey: "key") as! String
                 if (sessionKey.characters.count != 50) {
                     self.validationBox.text = response.value(forKey: "message") as? String
@@ -60,7 +68,15 @@ class LoginVC: UIViewController {
                     ],
                     wsURLPath: "telemed.asmx/getUser",
                     completion: {(oUser: NSDictionary) -> Void in
-                        self.testWSResponse(response)
+                        if (!self.testWSResponse(oUser)) {
+                            let alertController = UIAlertController(title: "Title", message: "This app is experiencing connectivity issues. Please check your internet connection. If the problem persists, please contact a Caduceus IT professional to help sort out the problems, Thanks.", preferredStyle: UIAlertControllerStyle.alert)
+                            alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { UIAlertAction in
+                                self.viewDidLoad()
+                                self.viewWillAppear(true)
+                            })
+                            self.present(alertController, animated: true, completion: nil)
+                            return
+                        }
                         DataModel.sharedInstance.accessNetworkDataObject(
                             params: [
                                 "sKey": DataModel.sharedInstance.sessionInfo.SessionKey,
@@ -69,8 +85,16 @@ class LoginVC: UIViewController {
                             ],
                             wsURLPath: "Util.asmx/returnObject",
                             completion: {(contactData: NSDictionary) -> Void in
-                                self.testWSResponse(response)
-                                // Create sessionInfo
+                                if (!self.testWSResponse(contactData)) {
+                                    let alertController = UIAlertController(title: "Title", message: "This app is experiencing connectivity issues. Please check your internet connection. If the problem persists, please contact a Caduceus IT professional to help sort out the problems, Thanks.", preferredStyle: UIAlertControllerStyle.alert)
+                                    alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { UIAlertAction in
+                                        self.viewDidLoad()
+                                        self.viewWillAppear(true)
+                                    })
+                                    self.present(alertController, animated: true, completion: nil)
+                                    return
+                                }
+                                // Create sessionInfomal
                                 
                                 DataModel.sharedInstance.sessionInfo.CompanyID = Int(contactData["CompanyId"] as! String)!
                                 DataModel.sharedInstance.sessionInfo.Name = (oUser["first_name"] as! String) + " " + (oUser["last_name"] as! String)
@@ -90,13 +114,39 @@ class LoginVC: UIViewController {
                                 
                                 self.correlateUsers(k: DataModel.sharedInstance.sessionInfo.SessionKey, i: oUser["user_id"] as! Int, completion: {(oUser: AnyObject) -> Void in
                                     if (DataModel.sharedInstance.sessionInfo.UserLevelID == 11) {
-                                        Messaging.messaging().subscribe(toTopic: "providers")
-                                        // SEGUE to ProviderDashboardVC
-                                        self.performSegue(withIdentifier: "ProviderDashboardVC", sender: sender)
+                                        DataModel.sharedInstance.accessNetworkDataObject(
+                                            params: [
+                                                "sKey": DataModel.sharedInstance.sessionInfo.SessionKey,
+                                                "iVisitId": 0,
+                                                "iUserId": oUser.value(forKey: "user_id")!,
+                                                "sRegToken": DataModel.sharedInstance.sessionInfo.FirebaseAccessToken
+                                            ],
+                                            wsURLPath: "Telemed.asmx/updateDocCreds",
+                                            completion: {(result: NSDictionary) -> Void in
+                                                print("subscribe")
+                                                Messaging.messaging().subscribe(toTopic: "providers")
+                                                // SEGUE to ProviderDashboardVC
+                                                self.performSegue(withIdentifier: "ProviderDashboardVC", sender: sender)
+                                            }
+                                        )
                                     }else if (DataModel.sharedInstance.sessionInfo.UserLevelID == 3) {
-                                        Messaging.messaging().subscribe(toTopic: "safetyManagers")
-                                        // SEGUE to SafetyManagerDashboardVC
-                                        self.performSegue(withIdentifier: "SafetyManagerDashboardVC", sender: sender)
+                                        print("hey <-----------------------------<<<")
+                                        print(oUser)
+                                        DataModel.sharedInstance.accessNetworkDataObject(
+                                            params: [
+                                                "sKey": DataModel.sharedInstance.sessionInfo.SessionKey,
+                                                "iVisitId": 0,
+                                                "iUserId": DataModel.sharedInstance.qbLoginParams.externalUserID,
+                                                "sRegToken": DataModel.sharedInstance.sessionInfo.FirebaseAccessToken
+                                            ],
+                                            wsURLPath: "Telemed.asmx/updateSmCreds",
+                                            completion: {(result: NSDictionary) -> Void in
+                                                print("subscribe")
+                                                Messaging.messaging().subscribe(toTopic: "safetyManagers")
+                                                // SEGUE to SafetyManagerDashboardVC
+                                                self.performSegue(withIdentifier: "SafetyManagerDashboardVC", sender: sender)
+                                            }
+                                        )
                                     }else {
                                         // SEGUE to PatientSortingRoomVC
                                         self.performSegue(withIdentifier: "PatientSortingRoomVC", sender: sender)
@@ -150,24 +200,34 @@ class LoginVC: UIViewController {
         )
     }
     
-    func testWSResponse(_ response: AnyObject) {
+    func testWSResponse(_ response: AnyObject) -> Bool {
+        var returnResponse = Bool()
+        guard response["conn"] != nil else {
+            print("CONN == nil <----------------------------<<<<<< ")
+            return false
+        }
         if response is NSArray {
             if (response.count == 0) {
-                print("Got zero Array results")
                 let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "LoginVC") as! LoginVC
+                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "AppAuthenticate") as! AppAuthenticationVC
                 self.present(nextViewController, animated:true, completion:nil)
-                return
+                print("Got zero Array results")
+                returnResponse = false
+            }else {
+                returnResponse = true
             }
         }else if response is NSDictionary {
             if (response.allValues.isEmpty) {
-                print("Got zero Dictionary results")
                 let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "LoginVC") as! LoginVC
+                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "AppAuthenticate") as! AppAuthenticationVC
                 self.present(nextViewController, animated:true, completion:nil)
-                return
+                print("Got zero Dictionary results")
+                returnResponse = false
+            }else {
+                returnResponse = true
             }
         }
+        return returnResponse
     }
 
 }

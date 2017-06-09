@@ -12,7 +12,11 @@ class updateRequiredVC: UIViewController {
 
     @IBAction func updateApp(_ sender: Any) {
         let url = URL(string: "https://itunes.apple.com/us/app/caduceus-telemed/id1234687786?ls=1&mt=8")!
-        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        if #available(iOS 10.0, *) {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        } else {
+            // Fallback on earlier versions
+        }
     }
     override func viewDidLoad() {
         super.viewDidLoad()

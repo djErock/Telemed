@@ -39,13 +39,14 @@ class CreditCardVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSour
     @IBOutlet weak var CancelCCButton: UIButton!
     
     @IBAction func CancelCCButton(_ sender: Any) {
-        let refreshAlert = UIAlertController(title: "Are you sure?", message: "You will lose any unsaved information if you cancel now.", preferredStyle: UIAlertControllerStyle.alert)
-        refreshAlert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (action: UIAlertAction!) in
+        let cancelCreditCardAction = UIAlertController(title: "Are you sure?", message: "You will lose any unsaved information if you cancel now.", preferredStyle: UIAlertControllerStyle.alert)
+        cancelCreditCardAction.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (action: UIAlertAction!) in
             self.delegate?.dismissed()
         }))
-        refreshAlert.addAction(UIAlertAction(title: "No", style: .cancel, handler: { (action: UIAlertAction!) in
+        cancelCreditCardAction.addAction(UIAlertAction(title: "No", style: .cancel, handler: { (action: UIAlertAction!) in
             return
         }))
+        self.present(cancelCreditCardAction, animated: true, completion: nil)
     }
     @IBAction func SubmitCCForm(_ sender: Any) {
         submitAttempted = true
@@ -63,7 +64,15 @@ class CreditCardVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSour
                 ],
                 wsURLPath: "Util.asmx/returnObject",
                 completion: {(creditCardData: NSDictionary) -> Void in
-                    self.testWSResponse(creditCardData)
+                    if (!self.testWSResponse(creditCardData)) {
+                        let alertController = UIAlertController(title: "Title", message: "This app is experiencing connectivity issues. Please check your internet connection. If the problem persists, please contact a Caduceus IT professional to help sort out the problems, Thanks.", preferredStyle: UIAlertControllerStyle.alert)
+                        alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { UIAlertAction in
+                            self.viewDidLoad()
+                            self.viewWillAppear(true)
+                        })
+                        self.present(alertController, animated: true, completion: nil)
+                        return
+                    }
                     creditCardData.setValue(DataModel.sharedInstance.sessionInfo.CompanyID, forKey: "company_id")
                     creditCardData.setValue(self.activeCCTypeId, forKey: "cardtype_id")
                     creditCardData.setValue(self.activeStateId, forKey: "state_id")
@@ -84,7 +93,15 @@ class CreditCardVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSour
                         ],
                         wsURLPath: "Telemed.asmx/updateCreditCard",
                         completion: {(response: AnyObject) -> Void in
-                            self.testWSResponse(response)
+                            if (!self.testWSResponse(response)) {
+                                let alertController = UIAlertController(title: "Title", message: "This app is experiencing connectivity issues. Please check your internet connection. If the problem persists, please contact a Caduceus IT professional to help sort out the problems, Thanks.", preferredStyle: UIAlertControllerStyle.alert)
+                                alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { UIAlertAction in
+                                    self.viewDidLoad()
+                                    self.viewWillAppear(true)
+                                })
+                                self.present(alertController, animated: true, completion: nil)
+                                return
+                            }
                             self.delegate?.dismissed()
                         }
                     )
@@ -93,6 +110,7 @@ class CreditCardVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSour
         }))
         refreshAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action: UIAlertAction!) in
             print("Handle Cancel Logic here")
+            return
         }))
         present(refreshAlert, animated: true, completion: nil)
     }
@@ -133,7 +151,15 @@ class CreditCardVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSour
             ],
             wsURLPath: "Util.asmx/populateDDL",
             completion: {(states: NSArray) -> Void in
-                self.testWSResponse(states)
+                if (!self.testWSResponse(states)) {
+                    let alertController = UIAlertController(title: "Title", message: "This app is experiencing connectivity issues. Please check your internet connection. If the problem persists, please contact a Caduceus IT professional to help sort out the problems, Thanks.", preferredStyle: UIAlertControllerStyle.alert)
+                    alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { UIAlertAction in
+                        self.viewDidLoad()
+                        self.viewWillAppear(true)
+                    })
+                    self.present(alertController, animated: true, completion: nil)
+                    return
+                }
                 for state in states {
                     if let stateDict = state as? NSDictionary {
                         if stateDict.value(forKey: "id") != nil {
@@ -154,7 +180,15 @@ class CreditCardVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSour
             ],
             wsURLPath: "Util.asmx/populateDDL",
             completion: {(ccTypes: NSArray) -> Void in
-                self.testWSResponse(ccTypes)
+                if (!self.testWSResponse(ccTypes)) {
+                    let alertController = UIAlertController(title: "Title", message: "This app is experiencing connectivity issues. Please check your internet connection. If the problem persists, please contact a Caduceus IT professional to help sort out the problems, Thanks.", preferredStyle: UIAlertControllerStyle.alert)
+                    alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { UIAlertAction in
+                        self.viewDidLoad()
+                        self.viewWillAppear(true)
+                    })
+                    self.present(alertController, animated: true, completion: nil)
+                    return
+                }
                 for cc in ccTypes {
                     if let ccDict = cc as? NSDictionary {
                         if ccDict.value(forKey: "id") != nil {
@@ -178,7 +212,15 @@ class CreditCardVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSour
                 ],
                 wsURLPath: "Util.asmx/returnObject",
                 completion: {(creditCardData: NSDictionary) -> Void in
-                    self.testWSResponse(creditCardData)
+                    if (!self.testWSResponse(creditCardData)) {
+                        let alertController = UIAlertController(title: "Title", message: "This app is experiencing connectivity issues. Please check your internet connection. If the problem persists, please contact a Caduceus IT professional to help sort out the problems, Thanks.", preferredStyle: UIAlertControllerStyle.alert)
+                        alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { UIAlertAction in
+                            self.viewDidLoad()
+                            self.viewWillAppear(true)
+                        })
+                        self.present(alertController, animated: true, completion: nil)
+                        return
+                    }
                     self.FirstNameField.text = creditCardData.value(forKey: "first_name") as? String
                     self.LastNameField.text = creditCardData.value(forKey: "last_name") as? String
                     self.Address.text = creditCardData.value(forKey: "address") as? String
@@ -383,24 +425,34 @@ class CreditCardVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSour
         return string.rangeOfCharacter(from: NSCharacterSet.decimalDigits.inverted) == nil
     }
     
-    func testWSResponse(_ response: AnyObject) {
+    func testWSResponse(_ response: AnyObject) -> Bool {
+        var returnResponse = Bool()
+        guard response["conn"] != nil else {
+            print("CONN == nil <----------------------------<<<<<< ")
+            return false
+        }
         if response is NSArray {
             if (response.count == 0) {
-                print("Got zero Array results")
                 let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "LoginVC") as! LoginVC
+                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "AppAuthenticate") as! AppAuthenticationVC
                 self.present(nextViewController, animated:true, completion:nil)
-                return
+                print("Got zero Array results")
+                returnResponse = false
+            }else {
+                returnResponse = true
             }
         }else if response is NSDictionary {
             if (response.allValues.isEmpty) {
-                print("Got zero Dictionary results")
                 let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "LoginVC") as! LoginVC
+                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "AppAuthenticate") as! AppAuthenticationVC
                 self.present(nextViewController, animated:true, completion:nil)
-                return
+                print("Got zero Dictionary results")
+                returnResponse = false
+            }else {
+                returnResponse = true
             }
         }
+        return returnResponse
     }
     
 }
