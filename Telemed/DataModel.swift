@@ -9,6 +9,7 @@
 import Foundation
 import Quickblox
 import QuickbloxWebRTC
+//import Rainbow
 
 class DataModel {
     
@@ -55,8 +56,8 @@ class DataModel {
     func destroySessionSaveLogin() {
         sessionInfo = (
             SessionKey: String(),
-            FirebaseAccessToken: String(),
-            APNSAccessToken: String(),
+            FirebaseAccessToken: DataModel.sharedInstance.sessionInfo.FirebaseAccessToken,
+            APNSAccessToken: DataModel.sharedInstance.sessionInfo.APNSAccessToken,
             VisitID: Int(),
             UserLevelID: Int(),
             DefaultLocationID: Int(),
@@ -71,7 +72,13 @@ class DataModel {
         print("Destroyed Session but Saved Login")
     }
     
-    func accessNetworkDataObject(params: [String:Any], wsURLPath: String, completion: @escaping (_ response: NSDictionary) -> ()) {
+    
+    
+    func accessNetworkData(vc: UIViewController, loadModal: Bool, params: [String:Any], wsURLPath: String, completion: @escaping (_ response: AnyObject) -> ()) {
+        if loadModal {
+            //DataModel.sharedInstance.toggleModalProgess(show: true)
+        }
+        // Present on vc.
         let url = URL(string: "https://telemed.caduceususa.com/ws/" + wsURLPath)!
         let session = URLSession.shared
         var request = URLRequest(url: url)
@@ -82,6 +89,9 @@ class DataModel {
         let task = session.dataTask(with: request as URLRequest, completionHandler: { data, response, error in
             guard error == nil else {
                 print("WEB SERVICE ERROR <----------------------------<<<<<< " + wsURLPath)
+                if loadModal {
+                    //DataModel.sharedInstance.toggleModalProgess(show: false)
+                }
                 print(error!)
                 let resp: [String: String] = [ "conn": "failed" ]
                 DispatchQueue.main.async { completion(resp as NSDictionary) }
@@ -89,31 +99,59 @@ class DataModel {
             }
             guard let data = data else {
                 print("WEB SERVICE ERROR <----------------------------<<<<<< " + wsURLPath)
+                if loadModal {
+                    //DataModel.sharedInstance.toggleModalProgess(show: false)
+                }
                 return
             }
             let status = (response as! HTTPURLResponse).statusCode
             if status == 500 {
-                print(type(of: data))
-                print(String(describing:data))
-                print(response ?? "No Response")
-                print(error ?? "No Error")
+                if loadModal {
+                    //DataModel.sharedInstance.toggleModalProgess(show: false)
+                }
+                do {
+                    if let parsedJSON = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
+                        print( String(describing:parsedJSON) )
+                    }else {
+                        print("JSONSerialization Error")
+                    }
+                } catch let error {
+                    print("Error with the error message JSON Serialization")
+                    print(error.localizedDescription)
+                }
+                print(error ?? "No Error Found where there should be")
                 print("accessNetworkDataObject: response status: \(status) - " + wsURLPath)
-                // NEED TO CREATE AN ALERT FOR THIS
-                return
+                // Access the storyboard and fetch an instance of the view controller
+                let window = UIApplication.shared.keyWindow;
+                var currentViewController = window?.rootViewController;
+                while (currentViewController?.presentedViewController != nil) {
+                    currentViewController = currentViewController?.presentedViewController;
+                    let loginViewController = currentViewController?.storyboard?.instantiateViewController(withIdentifier: "LoginVC")
+                    DispatchQueue.main.async { UIApplication.shared.keyWindow?.rootViewController = loginViewController }
+                    return
+                }
             }
             
             do {
                 if let parsedJSON = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
                     print("WEB SERVICE SUCCESS <----------------------------<<<<<< "+wsURLPath+" "+String(describing:params))
-                    var response = NSDictionary()
-                    if (parsedJSON["d"] as? NSDictionary != nil) {
-                        response = parsedJSON["d"] as! NSDictionary
+                    if loadModal {
+                        //DataModel.sharedInstance.toggleModalProgess(show: false)
+                    }
+                    if let parsedResponseDict = parsedJSON["d"] as? NSDictionary {
+                        DispatchQueue.main.async {
+                            completion(parsedResponseDict)
+                        }
+                    }else if let parsedResponseArr = parsedJSON["d"] as? NSArray {
+                        DispatchQueue.main.async {
+                            completion(parsedResponseArr)
+                        }
                     }else {
                         print("INVALID KEY <----------------------------<<<<<< " + wsURLPath)
-                        print(parsedJSON)
+                        DispatchQueue.main.async {
+                            completion(parsedJSON as AnyObject)
+                        }
                     }
-                    print(String(describing:response))
-                    DispatchQueue.main.async { completion(response) }
                 }
             } catch let error {
                 print("Error with JSON Serialization")
@@ -123,56 +161,71 @@ class DataModel {
         task.resume()
     }
     
-    func accessNetworkDataArray(params: [String:Any], wsURLPath: String, completion: @escaping (_ response: NSArray) -> ()) {
-        let url = URL(string: "https://telemed.caduceususa.com/ws/" + wsURLPath)!
-        let session = URLSession.shared
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        do { request.httpBody = try JSONSerialization.data(withJSONObject: params, options: .prettyPrinted) } catch let error { print(error.localizedDescription) }
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.addValue("application/json", forHTTPHeaderField: "Accept")
-        let task = session.dataTask(with: request as URLRequest, completionHandler: { data, response, error in
-            guard error == nil else {
-                print("WEB SERVICE ERROR <----------------------------<<<<<< " + wsURLPath)
-                print(error!)
-                let resp: [[String: String]] = [ ["conn": "failed"] ]
-                DispatchQueue.main.async { completion(resp as NSArray) }
-                return
+    func testWSResponse(vc: UIViewController, _ response: AnyObject) -> Bool {
+        var returnResponse = Bool()
+        if response is NSArray {
+            print(String(describing: response))
+            if (response.count == nil) {
+                let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "AppAuthenticate") as! AppAuthenticationVC
+                vc.present(nextViewController, animated:true, completion:nil)
+                print("Got zero Array results")
+                returnResponse = true
+            }else {
+                returnResponse = false
             }
-            guard let data = data else {
-                print("WEB SERVICE ERROR <----------------------------<<<<<< " + wsURLPath)
-                return
+        }else if response is NSDictionary {
+            guard response["conn"] != nil else {
+                print("CONN == nil <----------------------------<<<<<< ")
+                return true
             }
-            
-            let status = (response as! HTTPURLResponse).statusCode
-            if status == 500 {
-                print(type(of: data))
-                print(String(describing:data))
-                print(response ?? "No Response")
-                print("accessNetworkDataArray: response status: \(status) - " + wsURLPath)
-                // NEED TO CREATE AN ALERT FOR THIS
-                return
+            if (response.allValues.isEmpty) {
+                let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "AppAuthenticate") as! AppAuthenticationVC
+                vc.present(nextViewController, animated:true, completion:nil)
+                print("Got zero Dictionary results")
+                returnResponse = true
+            }else {
+                returnResponse = false
             }
-            
-            do {
-                if let parsedJSON = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
-                    print("WEB SERVICE SUCCESS <----------------------------<<<<<< " + wsURLPath)
-                    var response = NSArray()
-                    if (parsedJSON["d"] as? NSArray != nil) {
-                        response = parsedJSON["d"] as! NSArray
-                    }else {
-                        print("INVALID KEY <----------------------------<<<<<< " + wsURLPath)
-                        print(parsedJSON)
-                    }
-                    DispatchQueue.main.async { completion(response) }
-                }
-            } catch let error {
-                print("Error with JSON Serialization")
-                print(error.localizedDescription)
-            }
-        })
-        task.resume()
+        }
+        return returnResponse
+    }
+    
+    let modalAlert = UIAlertController(title: "Please Wait...", message: "Loading Data...", preferredStyle: UIAlertControllerStyle.alert)
+    
+    func toggleModalProgess(show: Bool) -> Void {
+        if (show == true) {
+            let loadingIndicator = UIActivityIndicatorView(frame: CGRect(x: 10, y: 5, width: 50, height: 50))
+            loadingIndicator.hidesWhenStopped = true
+            loadingIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.gray
+            loadingIndicator.startAnimating()
+            DataModel.sharedInstance.modalAlert.view.addSubview(loadingIndicator)
+            DataModel.sharedInstance.modalAlert.show()
+        }else if (show == false) {
+            DataModel.sharedInstance.modalAlert.hide()
+        }else {
+            return
+        }
     }
     
     private init() { }
+}
+
+public extension UIAlertController {
+    func show() {
+        print("show alertcontroller")
+        let win = UIWindow(frame: UIScreen.main.bounds)
+        let vc = UIViewController()
+        vc.view.backgroundColor = .clear
+        win.rootViewController = vc
+        win.windowLevel = UIWindowLevelAlert + 1
+        win.makeKeyAndVisible()
+        vc.present(self, animated: true, completion: nil)
+        print("we showed it")
+    }
+    func hide() {
+        print("hide alertcontroller")
+        dismiss(animated: true, completion: nil)
+    }
 }

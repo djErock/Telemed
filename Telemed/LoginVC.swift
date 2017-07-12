@@ -26,6 +26,7 @@ class LoginVC: UIViewController {
             //let vc = segue.destination as! PatientSortingRoomVC
         }
     }
+    @IBAction func unwindToMe(segue: UIStoryboardSegue){}
     @IBOutlet weak var username: UITextField!
     @IBOutlet weak var password: UITextField!
     @IBOutlet weak var validationBox: UILabel!
@@ -39,15 +40,17 @@ class LoginVC: UIViewController {
             validationBox.text = "Please enter valid credentials"
             return
         }
-        
-        DataModel.sharedInstance.accessNetworkDataObject(
+    
+        DataModel.sharedInstance.accessNetworkData(
+            vc: self,
+            loadModal: true,
             params: [
                 "sUser": username.text!,
                 "sPass": password.text!
             ],
             wsURLPath: "telemed.asmx/telemedLogin",
-            completion: {(response: NSDictionary) -> Void in
-                if (!self.testWSResponse(response)) {
+            completion: {(response: AnyObject) -> Void in
+                if (DataModel.sharedInstance.testWSResponse(vc: self, response)) {
                     let alertController = UIAlertController(title: "Title", message: "This app is experiencing connectivity issues. Please check your internet connection. If the problem persists, please contact a Caduceus IT professional to help sort out the problems, Thanks.", preferredStyle: UIAlertControllerStyle.alert)
                     alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { UIAlertAction in
                         self.viewDidLoad()
@@ -62,13 +65,15 @@ class LoginVC: UIViewController {
                     return
                 }
                 DataModel.sharedInstance.sessionInfo.SessionKey = sessionKey
-                DataModel.sharedInstance.accessNetworkDataObject(
+                DataModel.sharedInstance.accessNetworkData(
+                    vc: self,
+                    loadModal: false,
                     params: [
                         "sKey": DataModel.sharedInstance.sessionInfo.SessionKey
                     ],
                     wsURLPath: "telemed.asmx/getUser",
-                    completion: {(oUser: NSDictionary) -> Void in
-                        if (!self.testWSResponse(oUser)) {
+                    completion: {(oUser: AnyObject) -> Void in
+                        if (DataModel.sharedInstance.testWSResponse(vc: self, oUser)) {
                             let alertController = UIAlertController(title: "Title", message: "This app is experiencing connectivity issues. Please check your internet connection. If the problem persists, please contact a Caduceus IT professional to help sort out the problems, Thanks.", preferredStyle: UIAlertControllerStyle.alert)
                             alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { UIAlertAction in
                                 self.viewDidLoad()
@@ -77,15 +82,17 @@ class LoginVC: UIViewController {
                             self.present(alertController, animated: true, completion: nil)
                             return
                         }
-                        DataModel.sharedInstance.accessNetworkDataObject(
+                        DataModel.sharedInstance.accessNetworkData(
+                            vc: self,
+                            loadModal: false,
                             params: [
                                 "sKey": DataModel.sharedInstance.sessionInfo.SessionKey,
                                 "sType": "contact",
                                 "iObjectId": 0
                             ],
                             wsURLPath: "Util.asmx/returnObject",
-                            completion: {(contactData: NSDictionary) -> Void in
-                                if (!self.testWSResponse(contactData)) {
+                            completion: {(contactData: AnyObject) -> Void in
+                                if ( DataModel.sharedInstance.testWSResponse(vc: self, contactData) ) {
                                     let alertController = UIAlertController(title: "Title", message: "This app is experiencing connectivity issues. Please check your internet connection. If the problem persists, please contact a Caduceus IT professional to help sort out the problems, Thanks.", preferredStyle: UIAlertControllerStyle.alert)
                                     alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { UIAlertAction in
                                         self.viewDidLoad()
@@ -112,58 +119,75 @@ class LoginVC: UIViewController {
                                 DataModel.sharedInstance.qbLoginParams.fullName = (oUser["first_name"] as! String) + " " + (oUser["last_name"] as! String)
                                 DataModel.sharedInstance.qbLoginParams.externalUserID = UInt(oUser["user_id"] as! Int)
                                 
-                                self.correlateUsers(k: DataModel.sharedInstance.sessionInfo.SessionKey, i: oUser["user_id"] as! Int, completion: {(oUser: AnyObject) -> Void in
-                                    if (DataModel.sharedInstance.sessionInfo.UserLevelID == 11) {
-                                        DataModel.sharedInstance.accessNetworkDataObject(
-                                            params: [
-                                                "sKey": DataModel.sharedInstance.sessionInfo.SessionKey,
-                                                "iVisitId": 0,
-                                                "iUserId": oUser.value(forKey: "user_id")!,
-                                                "sRegToken": DataModel.sharedInstance.sessionInfo.FirebaseAccessToken
-                                            ],
-                                            wsURLPath: "Telemed.asmx/updateDocCreds",
-                                            completion: {(result: NSDictionary) -> Void in
-                                                print("subscribe")
-                                                Messaging.messaging().subscribe(toTopic: "providers")
-                                                // SEGUE to ProviderDashboardVC
-                                                self.performSegue(withIdentifier: "ProviderDashboardVC", sender: sender)
-                                            }
-                                        )
-                                    }else if (DataModel.sharedInstance.sessionInfo.UserLevelID == 3) {
-                                        print("hey <-----------------------------<<<")
-                                        print(oUser)
-                                        DataModel.sharedInstance.accessNetworkDataObject(
-                                            params: [
-                                                "sKey": DataModel.sharedInstance.sessionInfo.SessionKey,
-                                                "iVisitId": 0,
-                                                "iUserId": DataModel.sharedInstance.qbLoginParams.externalUserID,
-                                                "sRegToken": DataModel.sharedInstance.sessionInfo.FirebaseAccessToken
-                                            ],
-                                            wsURLPath: "Telemed.asmx/updateSmCreds",
-                                            completion: {(result: NSDictionary) -> Void in
-                                                print("subscribe")
-                                                Messaging.messaging().subscribe(toTopic: "safetyManagers")
-                                                // SEGUE to SafetyManagerDashboardVC
-                                                self.performSegue(withIdentifier: "SafetyManagerDashboardVC", sender: sender)
-                                            }
-                                        )
-                                    }else {
-                                        // SEGUE to PatientSortingRoomVC
-                                        self.performSegue(withIdentifier: "PatientSortingRoomVC", sender: sender)
-                                    }
+                                print(String(describing: DataModel.sharedInstance.qbLoginParams))
+                                
+                                self.correlateUsers(completion: {(qbUser: AnyObject) -> Void in
+                                    QBRequest.logOut(successBlock: { (QBResponse) in
+                                        if (DataModel.sharedInstance.sessionInfo.UserLevelID == 11) {
+                                            DataModel.sharedInstance.accessNetworkData(
+                                                vc: self,
+                                                loadModal: false,
+                                                params: [
+                                                    "sKey": DataModel.sharedInstance.sessionInfo.SessionKey,
+                                                    "iVisitId": 0,
+                                                    "iUserId": qbUser.value(forKey: "user_id")!,
+                                                    "sRegToken": DataModel.sharedInstance.sessionInfo.FirebaseAccessToken
+                                                ],
+                                                wsURLPath: "Telemed.asmx/updateDocCreds",
+                                                completion: {(result: AnyObject) -> Void in
+                                                    print("subscribe")
+                                                    Messaging.messaging().subscribe(toTopic: "providers")
+                                                    // SEGUE to ProviderDashboardVC
+                                                    self.performSegue(withIdentifier: "ProviderDashboardVC", sender: sender)
+                                                }
+                                            )
+                                        }else if (DataModel.sharedInstance.sessionInfo.UserLevelID == 3) {
+                                            DataModel.sharedInstance.accessNetworkData(
+                                                vc: self,
+                                                loadModal: false,
+                                                params: [
+                                                    "sKey": DataModel.sharedInstance.sessionInfo.SessionKey,
+                                                    "iVisitId": 0,
+                                                    "iUserId": DataModel.sharedInstance.qbLoginParams.externalUserID,
+                                                    "sRegToken": DataModel.sharedInstance.sessionInfo.FirebaseAccessToken
+                                                ],
+                                                wsURLPath: "Telemed.asmx/updateSmCreds",
+                                                completion: {(result: AnyObject) -> Void in
+                                                    print("subscribe")
+                                                    Messaging.messaging().subscribe(toTopic: "safetyManagers")
+                                                    // SEGUE to SafetyManagerDashboardVC
+                                                    self.performSegue(withIdentifier: "SafetyManagerDashboardVC", sender: sender)
+                                                }
+                                            )
+                                        }else {
+                                            // SEGUE to PatientSortingRoomVC
+                                            self.performSegue(withIdentifier: "PatientSortingRoomVC", sender: sender)
+                                        }
+                                    }, errorBlock: { (QBResponse) in
+                                        print("error logging out of QB")
+                                        print(QBResponse)
+                                    })
+                                    
                                 })
                             }
                         )
                     }
                 )
-        })
+            }
+        )
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         DataModel.sharedInstance.destroySessionSaveLogin()
-        username.text = DataModel.sharedInstance.sessionInfo.Email
-        password.text = DataModel.sharedInstance.sessionInfo.Password
+        if DataModel.sharedInstance.sessionInfo.Email.isEmpty {
+            username.text = "eg@marta.com"
+            password.text = "teamwork1"
+        }else {
+            username.text = DataModel.sharedInstance.sessionInfo.Email
+            password.text = DataModel.sharedInstance.sessionInfo.Password
+        }
+        
         validationBox.textAlignment = .center
         validationBox.text = ""
         username.becomeFirstResponder()
@@ -176,22 +200,31 @@ class LoginVC: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    func correlateUsers(k: String, i: Int, completion: @escaping (_ response: AnyObject) -> ()) {
+    func correlateUsers(completion: @escaping (_ response: AnyObject) -> ()) {
         QBRequest.logIn(
             withUserLogin: DataModel.sharedInstance.qbLoginParams.login!,
             password: DataModel.sharedInstance.qbLoginParams.password!,
             successBlock: {(_ response: QBResponse, _ user: QBUUser?) -> Void in
                 print("<-----------------------------------<<< Login succeeded")
                 DataModel.sharedInstance.qbLoginParams = user!
-                DispatchQueue.main.async { completion(response) }
+                completion(response)
             }, errorBlock: {(_ response: QBResponse) -> Void in
                 print("<-----------------------------------<<< Handle QB Login error")
                 QBRequest.signUp(
                     DataModel.sharedInstance.qbLoginParams,
                     successBlock: {(_ response: QBResponse, _ user: QBUUser?) -> Void in
                         print("<-----------------------------------<<< Sign up was successful")
-                        DataModel.sharedInstance.qbLoginParams = user!
-                        DispatchQueue.main.async { completion(response) }
+                        print(String(describing: DataModel.sharedInstance.qbLoginParams))
+                        QBRequest.logIn(
+                            withUserLogin: DataModel.sharedInstance.qbLoginParams.login!,
+                            password: DataModel.sharedInstance.qbLoginParams.password!,
+                            successBlock: {(_ logInResponse: QBResponse, _ loggedInUser: QBUUser?) -> Void in
+                                DataModel.sharedInstance.qbLoginParams = loggedInUser!
+                                print("<-----------------------------------<<< Login succeeded")
+                                completion(logInResponse)
+                        }, errorBlock: {(_ response: QBResponse) -> Void in
+                            print("Signed up but <-----------------------------------<<< Handle QB Login error")
+                        })
                     }, errorBlock: {(_ response: QBResponse) -> Void in
                         print("<-----------------------------------<<< Handle QB Sign Up error")
                     }
@@ -200,35 +233,7 @@ class LoginVC: UIViewController {
         )
     }
     
-    func testWSResponse(_ response: AnyObject) -> Bool {
-        var returnResponse = Bool()
-        guard response["conn"] != nil else {
-            print("CONN == nil <----------------------------<<<<<< ")
-            return false
-        }
-        if response is NSArray {
-            if (response.count == 0) {
-                let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "AppAuthenticate") as! AppAuthenticationVC
-                self.present(nextViewController, animated:true, completion:nil)
-                print("Got zero Array results")
-                returnResponse = false
-            }else {
-                returnResponse = true
-            }
-        }else if response is NSDictionary {
-            if (response.allValues.isEmpty) {
-                let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "AppAuthenticate") as! AppAuthenticationVC
-                self.present(nextViewController, animated:true, completion:nil)
-                print("Got zero Dictionary results")
-                returnResponse = false
-            }else {
-                returnResponse = true
-            }
-        }
-        return returnResponse
-    }
+    
 
 }
 

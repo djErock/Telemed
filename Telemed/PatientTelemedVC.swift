@@ -42,6 +42,7 @@ class PatientTelemedVC: UIViewController, QBRTCClientDelegate, QBChatDelegate, Q
     
     //var BackToDash: UIBarButtonItem!
     
+    var modalShadeView: UIView = UIView()
     var videoCapture: QBRTCCameraCapture?
     var session: QBRTCSession?
     var isExpanded = Bool()
@@ -73,17 +74,32 @@ class PatientTelemedVC: UIViewController, QBRTCClientDelegate, QBChatDelegate, Q
         QBRTCClient.instance().add(self)
         
         // Set Up Room
-        
+        UIApplication.shared.isIdleTimerDisabled = true
         isExpanded = false
         DataModel.sharedInstance.sessionInfo.VisitID = visitIdForSession
         TemporaryVisitIDLabel.text = String(visitIdForSession)
+        
+        DataModel.sharedInstance.accessNetworkData(
+            vc: self,
+            loadModal: false,
+            params: [
+                "sKey": DataModel.sharedInstance.sessionInfo.SessionKey,
+                "iVisitId": DataModel.sharedInstance.sessionInfo.VisitID
+            ],
+            wsURLPath: "util.asmx/enterRoom",
+            completion: {(response: AnyObject) -> Void in
+                print("<---<<< Entered a caduceus exam room")
+                print(String(describing: response))
+            }
+        )
         
         let rNameArray = DataModel.sharedInstance.qbLoginParams.tags
         let room = rNameArray! as! [String]
         let roomName = room[0]
         
         TemporaryRoomNameLabel.text = roomName
-        remoteVideoElement.contentMode = UIViewContentMode.scaleAspectFit
+        remoteVideoElement.autoresizingMask = [.flexibleTopMargin, .flexibleHeight, .flexibleRightMargin, .flexibleLeftMargin, .flexibleTopMargin, .flexibleWidth]
+        //remoteVideoElement.contentMode = UIViewContentMode.scaleAspectFit
         CallControls.layer.cornerRadius = 5
         CallControls.layer.masksToBounds = true
         
@@ -180,11 +196,17 @@ class PatientTelemedVC: UIViewController, QBRTCClientDelegate, QBChatDelegate, Q
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(QuitWebRTCVisit), name: Notification.Name.UIApplicationWillResignActive, object: nil)
         
+        modalShadeView = UIView(frame: CGRect(x: CGFloat(0), y: CGFloat(0), width: CGFloat(UIScreen.main.bounds.size.width), height: CGFloat(UIScreen.main.bounds.size.height)))
+        modalShadeView.backgroundColor = UIColor.gray
+        modalShadeView.alpha = 0
+        self.view.addSubview(modalShadeView)
+        
     }
     
     func QuitWebRTCVisit(sender: UIBarButtonItem) {
         print("Lets get out of here")
         if (self.session != nil) {
+            print("session != nil")
             let userInfo :[String:String] = ["key":"value"]
             self.session?.hangUp(userInfo)
         }
@@ -245,8 +267,8 @@ class PatientTelemedVC: UIViewController, QBRTCClientDelegate, QBChatDelegate, Q
                                         print("<-----------------------------------<<< User Update succeeded")
                                         QBChat.instance().disconnect(completionBlock: { (error) in
                                             QBRequest.logOut(successBlock: {(_ response: QBResponse) -> Void in
-                                                self.dismiss(animated: true, completion: {})
-                                                //self.performSegue(withIdentifier: "BackToDashBoard", sender: sender)
+                                                //self.dismiss(animated: true, completion: {})
+                                                self.performSegue(withIdentifier: "BackToDashBoard", sender: sender)
                                             }, errorBlock: {(_ response: QBResponse) -> Void in
                                                 print("ERROR LOGGING OUT OF QBREQUEST")
                                             })
@@ -351,25 +373,32 @@ class PatientTelemedVC: UIViewController, QBRTCClientDelegate, QBChatDelegate, Q
             // GO FULL SCREEN
             UIView.animate(withDuration: 0.8, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
                 
-                //self.view.bringSubview(toFront: self.modalShadeBackground)
+                let maxImageDrawingArea: CGRect = UIScreen.main.bounds
+                
+                let xScale = maxImageDrawingArea.size.width / self.remoteVideoElement.frame.width
+                let yScale = maxImageDrawingArea.size.height / self.remoteVideoElement.frame.height
+                let scaleFactor = xScale < yScale ? xScale : yScale;
+                
+                let height = maxImageDrawingArea.size.height * scaleFactor
+                let width = maxImageDrawingArea.size.width * scaleFactor
+                
                 self.view.bringSubview(toFront: self.remoteVideoElement)
                 self.view.bringSubview(toFront: self.localVideoElement)
+                self.remoteVideoElement.frame = CGRect(x: 0, y: 0, width: height, height: width)
+                self.remoteVideoElement.center = self.view.center
+                self.remoteVideoElement.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi / 2))
+                self.remoteVideoElement.layoutSubviews()
+                
+                /*
                 self.videoPlayerViewCenter = self.remoteVideoElement.center
                 
                 self.remoteVideoElement.frame = CGRect(x: 0, y: 0, width: self.view.frame.height, height: self.view.frame.width)
                 self.remoteVideoElement.center = self.view.center
                 self.remoteVideoElement.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi / 2))
                 self.remoteVideoElement.layoutSubviews()
-                
-                /*
-                self.remoteVideoElement.frame = CGRect(x: 0, y: 0, width: self.view.frame.height, height: self.view.frame.width)
-                self.remoteVideoElement.frame = AVMakeRect(aspectRatio: (self.remoteVideoElement.layer.preferredFrameSize()), insideRect: self.remoteVideoElement.frame)
-                self.remoteVideoElement.contentMode = .scaleAspectFit
-                self.remoteVideoElement.frame = UIScreen.main.bounds
-                self.remoteVideoElement.center = self.view.center
-                self.remoteVideoElement.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi / 2))
-                self.remoteVideoElement.layoutSubviews()
                 */
+ 
+                
             }, completion: nil)
         } else {
             // REVERT BACK TO ORIGINAL CONTRAINTS IN THE LAYOUT
@@ -387,16 +416,7 @@ class PatientTelemedVC: UIViewController, QBRTCClientDelegate, QBChatDelegate, Q
                 self.remoteVideoElement.layoutSubviews()
                 self.view.sendSubview(toBack: self.remoteVideoElement)
                 self.view.sendSubview(toBack: self.localVideoElement)
-                //self.view.sendSubview(toBack: self.modalShadeBackground)
                 
-                /*
-                self.remoteVideoElement.transform = CGAffineTransform.identity
-                self.remoteVideoElement.center = self.videoPlayerViewCenter
-                self.view.sendSubview(toBack: self.remoteVideoElement)
-                self.view.sendSubview(toBack: self.modalShadeBackground)
-                self.remoteVideoElement.frame = AVMakeRect(aspectRatio: (self.remoteVideoElement.layer.preferredFrameSize()), insideRect: self.remoteVideoElement.frame)
-                self.remoteVideoElement.layoutSubviews()
-                */
             }, completion: nil)
         }
         isExpanded = !isExpanded
@@ -517,7 +537,9 @@ class PatientTelemedVC: UIViewController, QBRTCClientDelegate, QBChatDelegate, Q
         print("<-----------------------------------------<<<< Connection is closed for user \(userID)")
         print(session)
         CallStatusTextView.text = "Connection is closed for user \(userID)"
-        self.QuitWebRTCVisit(sender: BackToDash)
+        if (self.session != nil) {
+            self.QuitWebRTCVisit(sender: BackToDash)
+        }
     }
     
     // connectedToUser
@@ -530,14 +552,18 @@ class PatientTelemedVC: UIViewController, QBRTCClientDelegate, QBChatDelegate, Q
     func session(_ session: QBRTCSession, disconnectedFromUser userID: NSNumber) {
         print("<-----------------------------------------<<<< Disconnected from user \(userID)")
         CallStatusTextView.text = "Disconnected from user \(userID)"
-        self.QuitWebRTCVisit(sender: BackToDash)
+        if (self.session != nil) {
+            self.QuitWebRTCVisit(sender: BackToDash)
+        }
     }
     
     // userDidNotRespond
     func session(_ session: QBRTCSession, userDidNotRespond userID: NSNumber) {
         print("<-----------------------------------------<<<< User \(userID) did not respond to your call within timeout")
         CallStatusTextView.text = "User \(userID) did not respond to your call within timeout"
-        self.QuitWebRTCVisit(sender: BackToDash)
+        if (self.session != nil) {
+            self.QuitWebRTCVisit(sender: BackToDash)
+        }
     }
     
     // connectionFailedForUser
@@ -564,11 +590,12 @@ class PatientTelemedVC: UIViewController, QBRTCClientDelegate, QBChatDelegate, Q
     // END LISTENERS
     
     func showCallControls() {
+        
         UIView.animate(
             withDuration: 0.35,
             animations: {
-                //self.modalShadeBackground.alpha = 0.8
-                //self.view.bringSubview(toFront: self.modalShadeBackground)
+                self.modalShadeView.alpha = 0.8
+                self.view.bringSubview(toFront: self.modalShadeView)
             }
         )
         UIView.animate(
@@ -576,7 +603,7 @@ class PatientTelemedVC: UIViewController, QBRTCClientDelegate, QBChatDelegate, Q
             animations: {
                 self.CallControls.alpha = 1
                 self.view.bringSubview(toFront: self.CallControls)
-        }
+            }
         )
     }
     
@@ -584,9 +611,9 @@ class PatientTelemedVC: UIViewController, QBRTCClientDelegate, QBChatDelegate, Q
         UIView.animate(
             withDuration: 0.35,
             animations: {
-                //self.modalShadeBackground.alpha = 0
-                //self.view.sendSubview(toBack: self.modalShadeBackground)
-        }
+                self.modalShadeView.alpha = 0
+                self.view.sendSubview(toBack: self.modalShadeView)
+            }
         )
         UIView.animate(
             withDuration: 0.35,
@@ -595,36 +622,6 @@ class PatientTelemedVC: UIViewController, QBRTCClientDelegate, QBChatDelegate, Q
                 self.view.sendSubview(toBack: self.CallControls)
             }
         )
-    }
-    
-    func testWSResponse(_ response: AnyObject) -> Bool {
-        var returnResponse = Bool()
-        guard response["conn"] != nil else {
-            print("CONN == nil <----------------------------<<<<<< ")
-            return false
-        }
-        if response is NSArray {
-            if (response.count == 0) {
-                let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "AppAuthenticate") as! AppAuthenticationVC
-                self.present(nextViewController, animated:true, completion:nil)
-                print("Got zero Array results")
-                returnResponse = false
-            }else {
-                returnResponse = true
-            }
-        }else if response is NSDictionary {
-            if (response.allValues.isEmpty) {
-                let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "AppAuthenticate") as! AppAuthenticationVC
-                self.present(nextViewController, animated:true, completion:nil)
-                print("Got zero Dictionary results")
-                returnResponse = false
-            }else {
-                returnResponse = true
-            }
-        }
-        return returnResponse
     }
     
 }

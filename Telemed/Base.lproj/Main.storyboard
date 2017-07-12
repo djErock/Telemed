@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="i5P-Jh-taL">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="i5P-Jh-taL">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -280,16 +281,16 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="PatientCompany" destination="ofm-Ub-YPe" id="DV9-Oc-Dyu"/>
-                                            <outlet property="PatientName" destination="AcK-9d-lsj" id="Zrx-Z2-bNh"/>
-                                            <outlet property="PatientStatusIndicator" destination="DDm-U5-Ewq" id="okA-NI-UYc"/>
-                                            <outlet property="dateTimeOfInjury" destination="Raa-y1-ezM" id="E5E-Ag-JRh"/>
+                                            <outlet property="PatientCompany" destination="ofm-Ub-YPe" id="Npi-75-BTf"/>
+                                            <outlet property="PatientName" destination="AcK-9d-lsj" id="hm6-hI-6fU"/>
+                                            <outlet property="PatientStatusIndicator" destination="DDm-U5-Ewq" id="Tbn-gz-Vfx"/>
+                                            <outlet property="dateTimeOfInjury" destination="Raa-y1-ezM" id="I8Y-lL-IjQ"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
-                                    <outlet property="dataSource" destination="Bod-Ix-NXU" id="GYq-qP-J98"/>
-                                    <outlet property="delegate" destination="Bod-Ix-NXU" id="VI1-sQ-1fW"/>
+                                    <outlet property="dataSource" destination="Bod-Ix-NXU" id="H7p-sW-cZ5"/>
+                                    <outlet property="delegate" destination="Bod-Ix-NXU" id="v0M-y9-cY7"/>
                                 </connections>
                             </tableView>
                             <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ap2-9a-AZS">
@@ -333,7 +334,7 @@
                     <connections>
                         <outlet property="CreateNewVisit" destination="80L-d8-VH9" id="BVD-lc-2FZ"/>
                         <outlet property="LogOff" destination="vHp-MA-T9F" id="cuG-jr-aVi"/>
-                        <outlet property="visitsView" destination="7y0-aR-L26" id="Eet-yP-JZe"/>
+                        <outlet property="visitsView" destination="7y0-aR-L26" id="DmG-sp-qs1"/>
                         <segue destination="tGg-Lo-eiC" kind="show" identifier="SendPatientToExamRoom" id="wys-50-HST"/>
                         <segue destination="zOU-1J-5Sf" kind="show" identifier="CreateNewVisit" id="kK9-7c-zNW"/>
                     </connections>
@@ -986,16 +987,19 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleAspectFill" translatesAutoresizingMaskIntoConstraints="NO" id="PGn-ns-lkr" customClass="QBRTCRemoteVideoView">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="282"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PGn-ns-lkr" customClass="QBRTCRemoteVideoView">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="281.5"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="PGn-ns-lkr" secondAttribute="height" multiplier="125:94" id="5fR-wM-xgm"/>
+                                </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HMD-jU-g1Y">
-                                <rect key="frame" x="265" y="298" width="95" height="72"/>
+                                <rect key="frame" x="265" y="297.5" width="95" height="72"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Visit ID #" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FC7-S4-TCl">
-                                <rect key="frame" x="12" y="337" width="101" height="22"/>
+                                <rect key="frame" x="12" y="336.5" width="101" height="22"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="101" id="6rK-Zj-LHb"/>
                                     <constraint firstAttribute="height" constant="22" id="6wm-kB-Wwp"/>
@@ -1005,13 +1009,16 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Peers" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e36-8e-Tu8">
-                                <rect key="frame" x="12" y="375" width="44" height="21"/>
+                                <rect key="frame" x="12" y="374.5" width="44" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="m5x-Vg-xoA"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3xW-Hg-ymz">
-                                <rect key="frame" x="12" y="386" width="351" height="35"/>
+                                <rect key="frame" x="12" y="385.5" width="351" height="35"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rWh-m0-lJ3">
                                         <rect key="frame" x="80" y="1" width="193" height="33"/>
@@ -1034,13 +1041,16 @@
                                 </constraints>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Room Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ra4-tj-AnD">
-                                <rect key="frame" x="12" y="299" width="94" height="21"/>
+                                <rect key="frame" x="12" y="298.5" width="94" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="mVS-ix-hF9"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Please Wait... We are attempting to connect you with a live provider. Thank you for your patience." textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="GUn-zG-ku1">
-                                <rect key="frame" x="12" y="461" width="351" height="147"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Please Wait... We are attempting to connect you with a live provider. Thank you for your patience." textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GUn-zG-ku1">
+                                <rect key="frame" x="12" y="460.5" width="351" height="147.5"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -1174,7 +1184,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="5At-Vv-Nf9"/>
-        <segue reference="97Y-56-zPn"/>
+        <segue reference="wys-50-HST"/>
         <segue reference="LaH-9B-DX9"/>
     </inferredMetricsTieBreakers>
 </document>

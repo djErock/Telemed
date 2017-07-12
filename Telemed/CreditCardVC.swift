@@ -56,15 +56,18 @@ class CreditCardVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSour
         let refreshAlert = UIAlertController(title: "Submit CC Form", message: ccFormOperationType + " this credit card information?", preferredStyle: UIAlertControllerStyle.alert)
         refreshAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
             print("Handle Ok logic here")
-            DataModel.sharedInstance.accessNetworkDataObject(
+            DataModel.sharedInstance.accessNetworkData(
+                vc: self,
+                loadModal: false,
                 params: [
                     "sKey": DataModel.sharedInstance.sessionInfo.SessionKey,
                     "sType": "credit_card",
                     "iObjectId": 0
                 ],
                 wsURLPath: "Util.asmx/returnObject",
-                completion: {(creditCardData: NSDictionary) -> Void in
-                    if (!self.testWSResponse(creditCardData)) {
+                completion: {(creditCardData: AnyObject) -> Void in
+                    
+                    if (DataModel.sharedInstance.testWSResponse(vc: self, creditCardData)) {
                         let alertController = UIAlertController(title: "Title", message: "This app is experiencing connectivity issues. Please check your internet connection. If the problem persists, please contact a Caduceus IT professional to help sort out the problems, Thanks.", preferredStyle: UIAlertControllerStyle.alert)
                         alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { UIAlertAction in
                             self.viewDidLoad()
@@ -85,7 +88,9 @@ class CreditCardVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSour
                     creditCardData.setValue(self.CCExpYearField.text!, forKey: "exp_year")
                     creditCardData.setValue(self.CCNumberField.text!, forKey: "card_number")
                     creditCardData.setValue(self.CCCSVField.text!, forKey: "security_code")
-                    DataModel.sharedInstance.accessNetworkDataObject(
+                    DataModel.sharedInstance.accessNetworkData(
+                        vc: self,
+                        loadModal: false,
                         params: [
                             "sKey": DataModel.sharedInstance.sessionInfo.SessionKey,
                             "sUpdateType": self.ccFormOperationType,
@@ -93,7 +98,7 @@ class CreditCardVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSour
                         ],
                         wsURLPath: "Telemed.asmx/updateCreditCard",
                         completion: {(response: AnyObject) -> Void in
-                            if (!self.testWSResponse(response)) {
+                            if (DataModel.sharedInstance.testWSResponse(vc: self, response)) {
                                 let alertController = UIAlertController(title: "Title", message: "This app is experiencing connectivity issues. Please check your internet connection. If the problem persists, please contact a Caduceus IT professional to help sort out the problems, Thanks.", preferredStyle: UIAlertControllerStyle.alert)
                                 alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { UIAlertAction in
                                     self.viewDidLoad()
@@ -144,14 +149,16 @@ class CreditCardVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSour
         CCTypePicker.delegate = self
         CCTypePicker.dataSource = self
         
-        DataModel.sharedInstance.accessNetworkDataArray(
+        DataModel.sharedInstance.accessNetworkData(
+            vc: self,
+            loadModal: false,
             params: [
                 "sKey": DataModel.sharedInstance.sessionInfo.SessionKey,
                 "sTableName": "tblStates"
             ],
             wsURLPath: "Util.asmx/populateDDL",
-            completion: {(states: NSArray) -> Void in
-                if (!self.testWSResponse(states)) {
+            completion: {(states: AnyObject) -> Void in
+                if (DataModel.sharedInstance.testWSResponse(vc: self, states)) {
                     let alertController = UIAlertController(title: "Title", message: "This app is experiencing connectivity issues. Please check your internet connection. If the problem persists, please contact a Caduceus IT professional to help sort out the problems, Thanks.", preferredStyle: UIAlertControllerStyle.alert)
                     alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { UIAlertAction in
                         self.viewDidLoad()
@@ -160,7 +167,7 @@ class CreditCardVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSour
                     self.present(alertController, animated: true, completion: nil)
                     return
                 }
-                for state in states {
+                for state in states as! NSArray {
                     if let stateDict = state as? NSDictionary {
                         if stateDict.value(forKey: "id") != nil {
                             if stateDict.value(forKey: "name") != nil {
@@ -173,14 +180,16 @@ class CreditCardVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSour
                 self.StatePicker.reloadAllComponents()
             }
         )
-        DataModel.sharedInstance.accessNetworkDataArray(
+        DataModel.sharedInstance.accessNetworkData(
+            vc: self,
+            loadModal: false,
             params: [
                 "sKey": DataModel.sharedInstance.sessionInfo.SessionKey,
                 "sTableName": "tblCreditCardTypes"
             ],
             wsURLPath: "Util.asmx/populateDDL",
-            completion: {(ccTypes: NSArray) -> Void in
-                if (!self.testWSResponse(ccTypes)) {
+            completion: {(ccTypes: AnyObject) -> Void in
+                if (DataModel.sharedInstance.testWSResponse(vc: self, ccTypes)) {
                     let alertController = UIAlertController(title: "Title", message: "This app is experiencing connectivity issues. Please check your internet connection. If the problem persists, please contact a Caduceus IT professional to help sort out the problems, Thanks.", preferredStyle: UIAlertControllerStyle.alert)
                     alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { UIAlertAction in
                         self.viewDidLoad()
@@ -189,7 +198,7 @@ class CreditCardVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSour
                     self.present(alertController, animated: true, completion: nil)
                     return
                 }
-                for cc in ccTypes {
+                for cc in ccTypes as! NSArray {
                     if let ccDict = cc as? NSDictionary {
                         if ccDict.value(forKey: "id") != nil {
                             if ccDict.value(forKey: "name") != nil {
@@ -204,15 +213,17 @@ class CreditCardVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSour
         )
         
         if (ccFormOperationType == "Edit") {
-            DataModel.sharedInstance.accessNetworkDataObject(
+            DataModel.sharedInstance.accessNetworkData(
+                vc: self,
+                loadModal: false,
                 params: [
                     "sKey": DataModel.sharedInstance.sessionInfo.SessionKey,
                     "sType": "credit_card",
                     "iObjectId": DataModel.sharedInstance.sessionInfo.ActiveCCID
                 ],
                 wsURLPath: "Util.asmx/returnObject",
-                completion: {(creditCardData: NSDictionary) -> Void in
-                    if (!self.testWSResponse(creditCardData)) {
+                completion: {(creditCardData: AnyObject) -> Void in
+                    if (DataModel.sharedInstance.testWSResponse(vc: self, creditCardData)) {
                         let alertController = UIAlertController(title: "Title", message: "This app is experiencing connectivity issues. Please check your internet connection. If the problem persists, please contact a Caduceus IT professional to help sort out the problems, Thanks.", preferredStyle: UIAlertControllerStyle.alert)
                         alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { UIAlertAction in
                             self.viewDidLoad()
@@ -423,36 +434,6 @@ class CreditCardVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSour
     
     func chkStrForNums(string: String) -> Bool {
         return string.rangeOfCharacter(from: NSCharacterSet.decimalDigits.inverted) == nil
-    }
-    
-    func testWSResponse(_ response: AnyObject) -> Bool {
-        var returnResponse = Bool()
-        guard response["conn"] != nil else {
-            print("CONN == nil <----------------------------<<<<<< ")
-            return false
-        }
-        if response is NSArray {
-            if (response.count == 0) {
-                let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "AppAuthenticate") as! AppAuthenticationVC
-                self.present(nextViewController, animated:true, completion:nil)
-                print("Got zero Array results")
-                returnResponse = false
-            }else {
-                returnResponse = true
-            }
-        }else if response is NSDictionary {
-            if (response.allValues.isEmpty) {
-                let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "AppAuthenticate") as! AppAuthenticationVC
-                self.present(nextViewController, animated:true, completion:nil)
-                print("Got zero Dictionary results")
-                returnResponse = false
-            }else {
-                returnResponse = true
-            }
-        }
-        return returnResponse
     }
     
 }

@@ -43,13 +43,13 @@
 		E67BBC3C1EB7C31800C6D39D /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E67BBC3B1EB7C31800C6D39D /* Accelerate.framework */; };
 		E67BBC421EB7C43100C6D39D /* QuickbloxWebRTC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E67BBC411EB7C43100C6D39D /* QuickbloxWebRTC.framework */; };
 		E67BBC431EB7C43100C6D39D /* QuickbloxWebRTC.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E67BBC411EB7C43100C6D39D /* QuickbloxWebRTC.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		E68339601EE9BED500DB15EB /* Quickblox.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E67BBC3D1EB7C41700C6D39D /* Quickblox.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E69ADBC11EB1232400AAD724 /* DataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69ADBC01EB1232400AAD724 /* DataModel.swift */; };
 		E69ADBC31EB2620800AAD724 /* ProviderDashboardVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69ADBC21EB2620800AAD724 /* ProviderDashboardVC.swift */; };
 		E69ADBC51EB264C000AAD724 /* PatientSortingRoomVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69ADBC41EB264C000AAD724 /* PatientSortingRoomVC.swift */; };
 		E69ADBC71EB264F000AAD724 /* SafetyManagerDashboardVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69ADBC61EB264F000AAD724 /* SafetyManagerDashboardVC.swift */; };
 		E69ADBC91EB3C35700AAD724 /* VisitsViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69ADBC81EB3C35600AAD724 /* VisitsViewCell.swift */; };
 		E6BBD2671EC22F680098945E /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6BBD2661EC22F680098945E /* AudioToolbox.framework */; };
+		E6D6A44C1F159C6700410EC5 /* Quickblox.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E67BBC3D1EB7C41700C6D39D /* Quickblox.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -76,7 +76,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				E68339601EE9BED500DB15EB /* Quickblox.framework in Embed Frameworks */,
+				E6D6A44C1F159C6700410EC5 /* Quickblox.framework in Embed Frameworks */,
 				E67BBC431EB7C43100C6D39D /* QuickbloxWebRTC.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";

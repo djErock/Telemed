@@ -14,33 +14,29 @@ class SafetyManagerDashboardVC: UIViewController, UITableViewDataSource, UITable
     @IBOutlet weak var LogOff: UIBarButtonItem!
     @IBOutlet weak var CreateNewVisit: UIBarButtonItem!
     
-    //var CreateNewVisit: UIBarButtonItem!
-    //var LogOff: UIBarButtonItem!
-    
     var PatientNameArray = [String]()
     var DateAndTimeOfInjuryArray = [String]()
-    var CompanyArray = [Int]()
-    var BranchArray = [Int]()
-    var StatusIndicatorArray = [String]()
+    var CompanyArray = [String]()
+    var BranchArray = [String]()
+    var StatusIndicatorArray = [Bool]()
     var ExamRoomsArray = [String]()
-    var VisitIDArray = [Int]()
+    var VisitIdArray = [String]()
+    var BranchIdArray = [String]()
+    
     var refreshVisits = UIRefreshControl()
     var isInitialVisitListSet = false
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        // Register the table view cell class and its reuse id
+        //self.visitsView.register(UITableViewCell.self, forCellReuseIdentifier: "Visit")
+        
+        // This view controller itself will provide the delegate methods and row data for the table view.
         visitsView.delegate = self
         visitsView.dataSource = self
-        DataModel.sharedInstance.sessionInfo.VisitID = 0
         
-        if #available(iOS 10.0, *) {
-            visitsView.refreshControl = self.refreshVisits
-        } else {
-            //visitsView.refreshControl
-        }
-        self.refreshVisits.attributedTitle = NSAttributedString(string: "Pull to refresh")
-        self.refreshVisits.addTarget(self, action: #selector(SafetyManagerDashboardVC.refreshVisitList), for: .valueChanged)
+        DataModel.sharedInstance.sessionInfo.VisitID = 0
         
         CreateNewVisit.title = "New " + "\u{2295}"
         CreateNewVisit.action = #selector(PrepareFaceSheet(sender:))
@@ -49,25 +45,41 @@ class SafetyManagerDashboardVC: UIViewController, UITableViewDataSource, UITable
         LogOff.action = #selector(SafetyManagerDashboardVC.LogOutOfTheSystem(sender:))
         
         refreshVisitList()
+        
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        
+        if #available(iOS 10.0, *) {
+            visitsView.refreshControl = self.refreshVisits
+        } else {
+            print("not #available(iOS 10.0, *)")
+            //visitsView.refreshControl
+        }
+        self.refreshVisits.attributedTitle = NSAttributedString(string: "Pull to refresh")
+        self.refreshVisits.addTarget(self, action: #selector(SafetyManagerDashboardVC.refreshVisitList), for: .valueChanged)
+ 
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
     func refreshVisitList() {
-        DataModel.sharedInstance.accessNetworkDataArray(
+        DataModel.sharedInstance.accessNetworkData(
+            vc: self,
+            loadModal: false,
             params: [
                 "sKey": DataModel.sharedInstance.sessionInfo.SessionKey
             ],
             wsURLPath: "Util.asmx/returnActiveVisits",
-            completion: {(visits: NSArray) -> Void in
-                if (!self.testWSResponse(visits)) {
+            completion: {(visits: AnyObject) -> Void in
+                if (DataModel.sharedInstance.testWSResponse(vc: self, visits)) {
                     let alertController = UIAlertController(title: "Title", message: "This app is experiencing connectivity issues. Please check your internet connection. If the problem persists, please contact a Caduceus IT professional to help sort out the problems, Thanks.", preferredStyle: UIAlertControllerStyle.alert)
                     alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { UIAlertAction in
-                        self.viewDidLoad()
-                        self.viewWillAppear(true)
+                        super.viewDidLoad()
+                        super.viewWillAppear(true)
                     })
                     self.present(alertController, animated: true, completion: nil)
                     return
@@ -75,14 +87,16 @@ class SafetyManagerDashboardVC: UIViewController, UITableViewDataSource, UITable
                 self.PatientNameArray.removeAll()
                 self.DateAndTimeOfInjuryArray.removeAll()
                 self.CompanyArray.removeAll()
+                self.BranchIdArray.removeAll()
                 self.BranchArray.removeAll()
                 self.StatusIndicatorArray.removeAll()
                 self.ExamRoomsArray.removeAll()
-                self.VisitIDArray.removeAll()
+                self.VisitIdArray.removeAll()
                 
-                for visit in visits {
+                
+                for visit in visits as! NSArray {
                     if let visitDict = visit as? NSDictionary {
-                        print(visitDict)
+                        
                         // PatientNameArray
                         if visitDict.value(forKey: "first_name") != nil {
                             if visitDict.value(forKey: "last_name") != nil {
@@ -95,8 +109,9 @@ class SafetyManagerDashboardVC: UIViewController, UITableViewDataSource, UITable
                         
                         // VisitIDArray
                         if visitDict.value(forKey: "visit_id") != nil {
-                            let visitID = Int(visitDict.value(forKey: "visit_id") as! String)
-                            self.VisitIDArray.append(visitID!)
+                            let visitID = visitDict.value(forKey: "visit_id") as! String
+                            //totalData = (jsonDict["totalfup"] as! NSString).doubleValue
+                            self.VisitIdArray.append(visitID)
                         }
                         
                         // ExamRoomsArray
@@ -116,18 +131,43 @@ class SafetyManagerDashboardVC: UIViewController, UITableViewDataSource, UITable
                         }
                         
                         // StatusIndicatorArray
+                        if visitDict.value(forKey: "is_occupied_prov") != nil {
+                            let status = visitDict.value(forKey: "is_occupied_prov") as! Bool
+                            self.StatusIndicatorArray.append(status)
+                        }
+                        
+                        
+                        // ExamRoomsArray
+                        if (visitDict.value(forKey: "room_name") != nil) {
+                            let room_name = visitDict.value(forKey: "room_name") as! String
+                            self.ExamRoomsArray.append(room_name)
+                        }
+                        
+                        // BranchIdArray
+                        if (visitDict.value(forKey: "companybranch_id") != nil) {
+                            let companyBranchName = visitDict.value(forKey: "companybranch_id") as! String
+                            self.BranchIdArray.append(companyBranchName)
+                        }
+                        
                         
                         // CompanyArray
-                        if visitDict.value(forKey: "company_id") != nil {
-                            let companyID = visitDict.value(forKey: "company_id") as! String
-                            self.CompanyArray.append(Int(companyID)!)
+                        if (visitDict.value(forKey: "company_name") != nil) {
+                            let companyName = visitDict.value(forKey: "company_name") as! String
+                            self.CompanyArray.append(companyName)
                         }
                         
                         // BranchArray
-                        if (visitDict.value(forKey: "companybranch_id") != nil) {
-                            let branchID = visitDict.value(forKey: "companybranch_id") as! String
-                            self.BranchArray.append(Int(branchID)!)
+                        if (visitDict.value(forKey: "branch_name") != nil) {
+                            let sBranch = visitDict.value(forKey: "branch_name") as! String
+                            if ( sBranch.isEmpty ) {
+                                self.BranchArray.append("No Branch")
+                            }else {
+                                let companyBranchName = visitDict.value(forKey: "branch_name") as! String
+                                self.BranchArray.append(companyBranchName)
+                            }
                         }
+                        
+ 
                     }
                 }
                 
@@ -143,91 +183,85 @@ class SafetyManagerDashboardVC: UIViewController, UITableViewDataSource, UITable
         return PatientNameArray.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let visitCell = tableView.dequeueReusableCell(withIdentifier: "Visit") as! VisitsViewCell
+    func tableView(_ visitsTableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let visitCell = visitsTableView.dequeueReusableCell(withIdentifier: "Visit") as! VisitsViewCell
+        
         visitCell.PatientName.text = PatientNameArray[indexPath.row]
         visitCell.dateTimeOfInjury.text = DateAndTimeOfInjuryArray[indexPath.row]
-        DataModel.sharedInstance.accessNetworkDataObject(
-            params: [
-                "sKey": DataModel.sharedInstance.sessionInfo.SessionKey,
-                "sType": "employer",
-                "iObjectId": CompanyArray[indexPath.row]
-            ],
-            wsURLPath: "Util.asmx/returnObject",
-            completion: {(company: NSDictionary) -> Void in
-                let companyName = company.value(forKey: "CompanyName")
-                if (self.BranchArray[indexPath.row] == 0) {
-                    visitCell.PatientCompany.text = companyName as? String
-                }else {
-                    DataModel.sharedInstance.accessNetworkDataObject(
-                        params: [
-                            "sKey": DataModel.sharedInstance.sessionInfo.SessionKey,
-                            "sType": "employer",
-                            "iObjectId": self.BranchArray[indexPath.row]
-                        ],
-                        wsURLPath: "Util.asmx/returnObject",
-                        completion: {(branch: NSDictionary) -> Void in
-                            let branchName = branch.value(forKey: "BranchName")
-                            visitCell.PatientCompany.text = (companyName as? String)! + " - " + (branchName as? String)!
-                        }
-                    )
-                }
-            }
-        )
+        
+        if StatusIndicatorArray[indexPath.row] {
+            visitCell.PatientStatusIndicator.backgroundColor = UIColor.green
+        }else {
+            visitCell.PatientStatusIndicator.backgroundColor = UIColor.red
+        }
+        
+        if ( BranchIdArray[indexPath.row] == "0" ) {
+            visitCell.PatientCompany.text = CompanyArray[indexPath.row]
+        }else {
+            visitCell.PatientCompany.text = CompanyArray[indexPath.row] + " - " + BranchArray[indexPath.row]
+        }
+        
         return visitCell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let updateParameters = QBUpdateUserParameters()
-        DataModel.sharedInstance.qbLoginParams.tags = [ExamRoomsArray[indexPath.row]]
-        updateParameters.tags = [ExamRoomsArray[indexPath.row]]
-        QBRequest.logIn(
-            withUserLogin: DataModel.sharedInstance.qbLoginParams.login!,
-            password: DataModel.sharedInstance.sessionInfo.QBPassword,
-            successBlock: {(_ response: QBResponse, _ user: QBUUser?) -> Void in
-                self.updateUser(params: updateParameters, completion: {(response: AnyObject) -> Void in
-                    let qbUser = DataModel.sharedInstance.qbLoginParams
-                    let tmUser: [String : Any] = [
-                        "id" : qbUser.id,
-                        "login" : qbUser.login ?? "",
-                        "password" : qbUser.password ?? "",
-                        "email" : qbUser.email ?? "",
-                        "full_name" : qbUser.fullName ?? "",
-                        "external_user_id" : qbUser.externalUserID,
-                        "tag_list" : String(describing: qbUser.tags)
-                    ]
-                    DataModel.sharedInstance.accessNetworkDataObject(
-                        params: [
-                            "sKey": DataModel.sharedInstance.sessionInfo.SessionKey,
-                            "sUpdateType": "edit",
-                            "oQbUser": tmUser
-                        ],
-                        wsURLPath: "Telemed.asmx/updateQbUser",
-                        completion: {(response: NSDictionary) -> Void in
-                            if (!self.testWSResponse(response)) {
-                                let alertController = UIAlertController(title: "Title", message: "This app is experiencing connectivity issues. Please check your internet connection. If the problem persists, please contact a Caduceus IT professional to help sort out the problems, Thanks.", preferredStyle: UIAlertControllerStyle.alert)
-                                alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { UIAlertAction in
-                                    self.viewDidLoad()
-                                    self.viewWillAppear(true)
-                                })
-                                self.present(alertController, animated: true, completion: nil)
-                                return
+        print("<---------<<< HEY")
+        if (self.VisitIdArray[indexPath.row] == "0") {
+            
+        }else {
+            let updateParameters = QBUpdateUserParameters()
+            DataModel.sharedInstance.qbLoginParams.tags = [ExamRoomsArray[indexPath.row]]
+            updateParameters.tags = [ExamRoomsArray[indexPath.row]]
+            QBRequest.logIn(
+                withUserLogin: DataModel.sharedInstance.qbLoginParams.login!,
+                password: DataModel.sharedInstance.sessionInfo.QBPassword,
+                successBlock: {(_ response: QBResponse, _ user: QBUUser?) -> Void in
+                    self.updateUser(params: updateParameters, completion: {(response: AnyObject) -> Void in
+                        let qbUser = DataModel.sharedInstance.qbLoginParams
+                        let tmUser: [String : Any] = [
+                            "id" : qbUser.id,
+                            "login" : qbUser.login ?? "",
+                            "password" : qbUser.password ?? "",
+                            "email" : qbUser.email ?? "",
+                            "full_name" : qbUser.fullName ?? "",
+                            "external_user_id" : qbUser.externalUserID,
+                            "tag_list" : String(describing: qbUser.tags)
+                        ]
+                        DataModel.sharedInstance.accessNetworkData(
+                            vc: self,
+                            loadModal: false,
+                            params: [
+                                "sKey": DataModel.sharedInstance.sessionInfo.SessionKey,
+                                "sUpdateType": "edit",
+                                "oQbUser": tmUser
+                            ],
+                            wsURLPath: "Telemed.asmx/updateQbUser",
+                            completion: {(response: AnyObject) -> Void in
+                                if (DataModel.sharedInstance.testWSResponse(vc: self, response)) {
+                                    let alertController = UIAlertController(title: "Title", message: "This app is experiencing connectivity issues. Please check your internet connection. If the problem persists, please contact a Caduceus IT professional to help sort out the problems, Thanks.", preferredStyle: UIAlertControllerStyle.alert)
+                                    alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { UIAlertAction in
+                                        self.viewDidLoad()
+                                        self.viewWillAppear(true)
+                                    })
+                                    self.present(alertController, animated: true, completion: nil)
+                                    return
+                                }
+                                DispatchQueue.main.async {
+                                    self.performSegue(withIdentifier: "SendPatientToExamRoom", sender: Int(self.VisitIdArray[indexPath.row]) )
+                                }
                             }
-                            DispatchQueue.main.async {
-                                self.performSegue(withIdentifier: "SendPatientToExamRoom", sender: self.VisitIDArray[indexPath.row])
-                            }
-                        }
-                    )
-                })
-            }, errorBlock: {(_ response: QBResponse) -> Void in
-                print("<-----------------------------------<<< Handle 2nd QB Login error")
-            }
-        )
+                        )
+                    })
+                }, errorBlock: {(_ response: QBResponse) -> Void in
+                    print("<-----------------------------------<<< Handle 2nd QB Login error")
+                }
+            )
+        }
     }
     
     
     func LogOutOfTheSystem(sender: UIBarButtonItem) {
-        print("HEY")
+        print("LogOutOfTheSystem")
         DataModel.sharedInstance.destroySession()
         if QBChat.instance().isConnected {
             QBChat.instance().disconnect(completionBlock: { (error) in
@@ -253,36 +287,6 @@ class SafetyManagerDashboardVC: UIViewController, UITableViewDataSource, UITable
         }, errorBlock: { (response: QBResponse) -> Void in
             print("<-----------------------------------<<< Handle QB Update Current User error")
         })
-    }
-    
-    func testWSResponse(_ response: AnyObject) -> Bool {
-        var returnResponse = Bool()
-        guard response["conn"] != nil else {
-            print("CONN == nil <----------------------------<<<<<< ")
-            return false
-        }
-        if response is NSArray {
-            if (response.count == 0) {
-                let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "AppAuthenticate") as! AppAuthenticationVC
-                self.present(nextViewController, animated:true, completion:nil)
-                print("Got zero Array results")
-                returnResponse = false
-            }else {
-                returnResponse = true
-            }
-        }else if response is NSDictionary {
-            if (response.allValues.isEmpty) {
-                let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "AppAuthenticate") as! AppAuthenticationVC
-                self.present(nextViewController, animated:true, completion:nil)
-                print("Got zero Dictionary results")
-                returnResponse = false
-            }else {
-                returnResponse = true
-            }
-        }
-        return returnResponse
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

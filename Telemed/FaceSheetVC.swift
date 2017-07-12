@@ -35,19 +35,21 @@ class FaceSheetVC: UIViewController, UITableViewDataSource, UITableViewDelegate,
         submitAttempted = true
         if (!validateFSForm()) { return }
         self.showModal()
-        DataModel.sharedInstance.accessNetworkDataObject(
+        DataModel.sharedInstance.accessNetworkData(
+            vc: self,
+            loadModal: false,
             params: [
                 "sKey": DataModel.sharedInstance.sessionInfo.SessionKey,
                 "sType": "form_facesheet",
                 "iObjectId": 0
             ],
             wsURLPath: "Util.asmx/returnObject",
-            completion: {(FaceSheetForm: NSDictionary) -> Void in
-                if (!self.testWSResponse(FaceSheetForm)) {
+            completion: {(FaceSheetForm: AnyObject) -> Void in
+                if (DataModel.sharedInstance.testWSResponse(vc: self, FaceSheetForm)) {
                     let alertController = UIAlertController(title: "Title", message: "This app is experiencing connectivity issues. Please check your internet connection. If the problem persists, please contact a Caduceus IT professional to help sort out the problems, Thanks.", preferredStyle: UIAlertControllerStyle.alert)
                     alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { UIAlertAction in
-                        self.viewDidLoad()
-                        self.viewWillAppear(true)
+                        super.viewDidLoad()
+                        super.viewWillAppear(true)
                     })
                     self.present(alertController, animated: true, completion: nil)
                     return
@@ -62,18 +64,21 @@ class FaceSheetVC: UIViewController, UITableViewDataSource, UITableViewDelegate,
                 FaceSheetForm.setValue(String(describing:self.DOBPicker.date), forKey: "date_of_birth")
                 FaceSheetForm.setValue(DataModel.sharedInstance.sessionInfo.ActiveCCID, forKey: "creditcard_id")
                 
-                DataModel.sharedInstance.accessNetworkDataObject(
+                DataModel.sharedInstance.accessNetworkData(
+                    vc: self,
+                    loadModal: true,
                     params: [
                         "sKey": DataModel.sharedInstance.sessionInfo.SessionKey,
                         "oFormFS": FaceSheetForm
                     ],
                     wsURLPath: "Telemed.asmx/submitPatient",
-                    completion: {(results: NSDictionary) -> Void in
-                        if (!self.testWSResponse(results)) {
+                    completion: {(results: AnyObject) -> Void in
+                        
+                        if (DataModel.sharedInstance.testWSResponse(vc: self, results)) {
                             let alertController = UIAlertController(title: "Title", message: "This app is experiencing connectivity issues. Please check your internet connection. If the problem persists, please contact a Caduceus IT professional to help sort out the problems, Thanks.", preferredStyle: UIAlertControllerStyle.alert)
                             alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { UIAlertAction in
-                                self.viewDidLoad()
-                                self.viewWillAppear(true)
+                                super.viewDidLoad()
+                                super.viewWillAppear(true)
                             })
                             self.present(alertController, animated: true, completion: nil)
                             return
@@ -97,15 +102,17 @@ class FaceSheetVC: UIViewController, UITableViewDataSource, UITableViewDelegate,
                                         "external_user_id" : qbUser.externalUserID,
                                         "tag_list" : String(describing: qbUser.tags)
                                     ]
-                                    DataModel.sharedInstance.accessNetworkDataObject(
+                                    DataModel.sharedInstance.accessNetworkData(
+                                        vc: self,
+                                        loadModal: false,
                                         params: [
                                             "sKey": DataModel.sharedInstance.sessionInfo.SessionKey,
                                             "sUpdateType": "edit",
                                             "oQbUser": tmUser
                                         ],
                                         wsURLPath: "Telemed.asmx/updateQbUser",
-                                        completion: {(response: NSDictionary) -> Void in
-                                            if (!self.testWSResponse(response)) {
+                                        completion: {(response: AnyObject) -> Void in
+                                            if (DataModel.sharedInstance.testWSResponse(vc: self, response)) {
                                                 let alertController = UIAlertController(title: "Title", message: "This app is experiencing connectivity issues. Please check your internet connection. If the problem persists, please contact a Caduceus IT professional to help sort out the problems, Thanks.", preferredStyle: UIAlertControllerStyle.alert)
                                                 alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { UIAlertAction in
                                                     self.viewDidLoad()
@@ -141,15 +148,17 @@ class FaceSheetVC: UIViewController, UITableViewDataSource, UITableViewDelegate,
         if (DataModel.sharedInstance.sessionInfo.ActiveCCID != 0) {
             let deleteAlert = UIAlertController(title: "Delete credit card...", message: "Are you sure you want to delete this card from the system?", preferredStyle: UIAlertControllerStyle.alert)
             deleteAlert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (action: UIAlertAction!) in
-                DataModel.sharedInstance.accessNetworkDataObject(
+                DataModel.sharedInstance.accessNetworkData(
+                    vc: self,
+                    loadModal: false,
                     params: [
                         "sKey": DataModel.sharedInstance.sessionInfo.SessionKey,
                         "sType": "credit_card",
                         "iObjectId": DataModel.sharedInstance.sessionInfo.ActiveCCID
                     ],
                     wsURLPath: "Util.asmx/returnObject",
-                    completion: {(creditCardData: NSDictionary) -> Void in
-                        if (!self.testWSResponse(creditCardData)) {
+                    completion: {(creditCardData: AnyObject) -> Void in
+                        if (DataModel.sharedInstance.testWSResponse(vc: self, creditCardData)) {
                             let alertController = UIAlertController(title: "Title", message: "This app is experiencing connectivity issues. Please check your internet connection. If the problem persists, please contact a Caduceus IT professional to help sort out the problems, Thanks.", preferredStyle: UIAlertControllerStyle.alert)
                             alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { UIAlertAction in
                                 self.viewDidLoad()
@@ -159,15 +168,17 @@ class FaceSheetVC: UIViewController, UITableViewDataSource, UITableViewDelegate,
                             return
                         }
                         creditCardData.setValue(DataModel.sharedInstance.sessionInfo.ActiveCCID, forKey: "creditcard_id")
-                        DataModel.sharedInstance.accessNetworkDataObject(
+                        DataModel.sharedInstance.accessNetworkData(
+                            vc: self,
+                            loadModal: false,
                             params: [
                                 "sKey": DataModel.sharedInstance.sessionInfo.SessionKey,
                                 "sUpdateType": "Delete",
                                 "oCreditCard": creditCardData
                             ],
                             wsURLPath: "Telemed.asmx/updateCreditCard",
-                            completion: {(response: NSDictionary) -> Void in
-                                if (!self.testWSResponse(response)) {
+                            completion: {(response: AnyObject) -> Void in
+                                if (DataModel.sharedInstance.testWSResponse(vc: self, response)) {
                                     let alertController = UIAlertController(title: "Title", message: "This app is experiencing connectivity issues. Please check your internet connection. If the problem persists, please contact a Caduceus IT professional to help sort out the problems, Thanks.", preferredStyle: UIAlertControllerStyle.alert)
                                     alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { UIAlertAction in
                                         self.viewDidLoad()
@@ -255,14 +266,16 @@ class FaceSheetVC: UIViewController, UITableViewDataSource, UITableViewDelegate,
     func updateCreditCardList() {
         CardNameArray = [String]()
         CardIDArray = [Int]()
-        DataModel.sharedInstance.accessNetworkDataArray(
+        DataModel.sharedInstance.accessNetworkData(
+            vc: self,
+            loadModal: false,
             params: [
                 "sKey": DataModel.sharedInstance.sessionInfo.SessionKey,
                 "sTableName": "none"
             ],
             wsURLPath: "Util.asmx/populateDDLCreditCards",
-            completion: {(creditCards: NSArray) -> Void in
-                if (!self.testWSResponse(creditCards)) {
+            completion: {(creditCards: AnyObject) -> Void in
+                if (DataModel.sharedInstance.testWSResponse(vc: self, creditCards)) {
                     let alertController = UIAlertController(title: "Title", message: "This app is experiencing connectivity issues. Please check your internet connection. If the problem persists, please contact a Caduceus IT professional to help sort out the problems, Thanks.", preferredStyle: UIAlertControllerStyle.alert)
                     alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { UIAlertAction in
                         self.viewDidLoad()
@@ -271,7 +284,7 @@ class FaceSheetVC: UIViewController, UITableViewDataSource, UITableViewDelegate,
                     self.present(alertController, animated: true, completion: nil)
                     return
                 }
-                for card in creditCards {
+                for card in creditCards as! NSArray {
                     if let cardDict = card as? NSDictionary {
                         if cardDict.value(forKey: "id") != nil && cardDict.value(forKey: "name") != nil {
                             self.CardNameArray.append(cardDict.value(forKey: "name") as! String)
@@ -301,7 +314,6 @@ class FaceSheetVC: UIViewController, UITableViewDataSource, UITableViewDelegate,
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        print("lets add a card")
         let CreditCardCell = tableView.dequeueReusableCell(withIdentifier: "CreditCard", for: indexPath) as! CreditCardsViewCell
         if (!CardNameArray.isEmpty) {
             CreditCardCell.CreditCardName.text = CardNameArray[indexPath.row]
@@ -464,36 +476,6 @@ class FaceSheetVC: UIViewController, UITableViewDataSource, UITableViewDelegate,
         }else {
             
         }
-    }
-    
-    func testWSResponse(_ response: AnyObject) -> Bool {
-        var returnResponse = Bool()
-        guard response["conn"] != nil else {
-            print("CONN == nil <----------------------------<<<<<< ")
-            return false
-        }
-        if response is NSArray {
-            if (response.count == 0) {
-                let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "AppAuthenticate") as! AppAuthenticationVC
-                self.present(nextViewController, animated:true, completion:nil)
-                print("Got zero Array results")
-                returnResponse = false
-            }else {
-                returnResponse = true
-            }
-        }else if response is NSDictionary {
-            if (response.allValues.isEmpty) {
-                let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "AppAuthenticate") as! AppAuthenticationVC
-                self.present(nextViewController, animated:true, completion:nil)
-                print("Got zero Dictionary results")
-                returnResponse = false
-            }else {
-                returnResponse = true
-            }
-        }
-        return returnResponse
     }
 
 }
