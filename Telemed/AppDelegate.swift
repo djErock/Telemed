@@ -71,6 +71,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         // [END register_for_notifications]
         
+        FirebaseCrashMessage("We threw an error")
+        fatalError()
+        
         return true
     }
     

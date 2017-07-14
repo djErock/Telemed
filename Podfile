@@ -21,6 +21,7 @@ end
 
 pod 'Firebase/Core'
 pod 'Firebase/Messaging'
+pod 'Firebase/Crash'
 
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '8.0'

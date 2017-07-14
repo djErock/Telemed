@@ -25,6 +25,7 @@ class SafetyManagerDashboardVC: UIViewController, UITableViewDataSource, UITable
     
     var refreshVisits = UIRefreshControl()
     var isInitialVisitListSet = false
+    var isVisitListRefreshing = Bool()
     
     
     override func viewDidLoad() {
@@ -44,6 +45,7 @@ class SafetyManagerDashboardVC: UIViewController, UITableViewDataSource, UITable
         LogOff.title = "Sign Out"
         LogOff.action = #selector(SafetyManagerDashboardVC.LogOutOfTheSystem(sender:))
         
+        isVisitListRefreshing = false
         refreshVisitList()
         
     }
@@ -67,6 +69,11 @@ class SafetyManagerDashboardVC: UIViewController, UITableViewDataSource, UITable
     }
     
     func refreshVisitList() {
+        if isVisitListRefreshing {
+            print("Currently refreshing; try again later")
+            return
+        }
+        isVisitListRefreshing = true
         DataModel.sharedInstance.accessNetworkData(
             vc: self,
             loadModal: false,
@@ -136,19 +143,11 @@ class SafetyManagerDashboardVC: UIViewController, UITableViewDataSource, UITable
                             self.StatusIndicatorArray.append(status)
                         }
                         
-                        
-                        // ExamRoomsArray
-                        if (visitDict.value(forKey: "room_name") != nil) {
-                            let room_name = visitDict.value(forKey: "room_name") as! String
-                            self.ExamRoomsArray.append(room_name)
-                        }
-                        
                         // BranchIdArray
                         if (visitDict.value(forKey: "companybranch_id") != nil) {
                             let companyBranchName = visitDict.value(forKey: "companybranch_id") as! String
                             self.BranchIdArray.append(companyBranchName)
                         }
-                        
                         
                         // CompanyArray
                         if (visitDict.value(forKey: "company_name") != nil) {
@@ -172,6 +171,7 @@ class SafetyManagerDashboardVC: UIViewController, UITableViewDataSource, UITable
                 }
                 
                 OperationQueue.main.addOperation({
+                    self.isVisitListRefreshing = false
                     self.visitsView.reloadData()
                     self.refreshVisits.endRefreshing()
                 })

@@ -47,6 +47,7 @@ class PatientTelemedVC: UIViewController, QBRTCClientDelegate, QBChatDelegate, Q
     var session: QBRTCSession?
     var isExpanded = Bool()
     var videoPlayerViewCenter = CGPoint()
+    var isLoggingOut = Bool()
     
     @IBAction func callOpponents(_ sender: Any, forEvent event: UIEvent) {
         QBRTCClient.instance().add(self)
@@ -78,6 +79,7 @@ class PatientTelemedVC: UIViewController, QBRTCClientDelegate, QBChatDelegate, Q
         isExpanded = false
         DataModel.sharedInstance.sessionInfo.VisitID = visitIdForSession
         TemporaryVisitIDLabel.text = String(visitIdForSession)
+        isLoggingOut = false
         
         DataModel.sharedInstance.accessNetworkData(
             vc: self,
@@ -209,7 +211,10 @@ class PatientTelemedVC: UIViewController, QBRTCClientDelegate, QBChatDelegate, Q
             print("session != nil")
             let userInfo :[String:String] = ["key":"value"]
             self.session?.hangUp(userInfo)
+        }else if isLoggingOut {
+            return
         }
+        isLoggingOut = true
         self.session = nil;
         self.videoCapture = nil
         let rNameArray = DataModel.sharedInstance.qbLoginParams.tags
@@ -237,6 +242,7 @@ class PatientTelemedVC: UIViewController, QBRTCClientDelegate, QBChatDelegate, Q
                                     DataModel.sharedInstance.sessionInfo.Peers = [NSNumber]()
                                     DataModel.sharedInstance.qbLoginParams.tags = [String()]
                                     QBRTCClient.deinitializeRTC()
+                                    self.isLoggingOut = false
                                     self.performSegue(withIdentifier: "BackToDashBoard", sender: sender)
                                 }, errorBlock: {(_ response: QBResponse) -> Void in
                                     print("ERROR LOGGING OUT OF QBREQUEST")
@@ -268,6 +274,7 @@ class PatientTelemedVC: UIViewController, QBRTCClientDelegate, QBChatDelegate, Q
                                         QBChat.instance().disconnect(completionBlock: { (error) in
                                             QBRequest.logOut(successBlock: {(_ response: QBResponse) -> Void in
                                                 //self.dismiss(animated: true, completion: {})
+                                                self.isLoggingOut = false
                                                 self.performSegue(withIdentifier: "BackToDashBoard", sender: sender)
                                             }, errorBlock: {(_ response: QBResponse) -> Void in
                                                 print("ERROR LOGGING OUT OF QBREQUEST")

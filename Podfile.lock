@@ -5,6 +5,9 @@ PODS:
   - Firebase/Core (4.0.0):
     - FirebaseAnalytics (= 4.0.0)
     - FirebaseCore (= 4.0.0)
+  - Firebase/Crash (4.0.0):
+    - Firebase/Core
+    - FirebaseCrash (= 2.0.0)
   - Firebase/Messaging (4.0.0):
     - Firebase/Core
     - FirebaseMessaging (= 2.0.0)
@@ -14,6 +17,12 @@ PODS:
     - GoogleToolboxForMac/NSData+zlib (~> 2.1)
   - FirebaseCore (4.0.0):
     - GoogleToolboxForMac/NSData+zlib (~> 2.1)
+  - FirebaseCrash (2.0.0):
+    - FirebaseAnalytics (~> 4.0)
+    - FirebaseInstanceID (~> 2.0)
+    - GoogleToolboxForMac/Logger (~> 2.1)
+    - GoogleToolboxForMac/NSData+zlib (~> 2.1)
+    - Protobuf (~> 3.1)
   - FirebaseInstanceID (2.0.0):
     - FirebaseCore (~> 4.0)
   - FirebaseMessaging (2.0.0):
@@ -36,6 +45,7 @@ DEPENDENCIES:
   - Crashlytics
   - Fabric
   - Firebase/Core
+  - Firebase/Crash
   - Firebase/Messaging
   - QuickBlox
   - Quickblox-WebRTC (~> 2.4.1)
@@ -46,6 +56,7 @@ SPEC CHECKSUMS:
   Firebase: 284eea779b73fdff309791817da7c68bff8dd572
   FirebaseAnalytics: 6f08e746f7d66f5452931bc2e822b5df9c66b64a
   FirebaseCore: 85ad466044c2f013cdb167f85d426d15b128114a
+  FirebaseCrash: 600ec2cbd8e10c3064a42de2c6ee7687bd02a076
   FirebaseInstanceID: 9fbf536668f4d3f0880e7438456dabd1376e294b
   FirebaseMessaging: 227406c05b0dc9290702d2e9f18ab5528f0c2cf2
   GoogleToolboxForMac: 8e329f1b599f2512c6b10676d45736bcc2cbbeb0
@@ -53,6 +64,6 @@ SPEC CHECKSUMS:
   QuickBlox: 67cafa5d7b237db7344c506ca5dc38365180cacb
   Quickblox-WebRTC: b1bfc43bdb3d07ad41c98af3a4571296235fbfec
 
-PODFILE CHECKSUM: 34a3ebf5fa2a7af061732272ccf8a265ffe48bf7
+PODFILE CHECKSUM: 5098fce2a9a3a49877bb2e62c8d8bb9325cacde9
 
 COCOAPODS: 1.2.1

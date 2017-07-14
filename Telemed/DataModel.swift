@@ -204,8 +204,6 @@ class DataModel {
             DataModel.sharedInstance.modalAlert.show()
         }else if (show == false) {
             DataModel.sharedInstance.modalAlert.hide()
-        }else {
-            return
         }
     }
     

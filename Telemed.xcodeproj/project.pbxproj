@@ -49,7 +49,6 @@
 		E69ADBC71EB264F000AAD724 /* SafetyManagerDashboardVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69ADBC61EB264F000AAD724 /* SafetyManagerDashboardVC.swift */; };
 		E69ADBC91EB3C35700AAD724 /* VisitsViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69ADBC81EB3C35600AAD724 /* VisitsViewCell.swift */; };
 		E6BBD2671EC22F680098945E /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6BBD2661EC22F680098945E /* AudioToolbox.framework */; };
-		E6D6A44C1F159C6700410EC5 /* Quickblox.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E67BBC3D1EB7C41700C6D39D /* Quickblox.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -76,7 +75,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				E6D6A44C1F159C6700410EC5 /* Quickblox.framework in Embed Frameworks */,
 				E67BBC431EB7C43100C6D39D /* QuickbloxWebRTC.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -596,7 +594,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "bash \"${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/QuickbloxWebRTC.framework/strip-framework.sh\"";
+			shellScript = "bash \"${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/QuickbloxWebRTC.framework/strip-framework.sh\"\n# Get the GOOGLE_APP_ID from your GoogleService-Info.plist file\nGOOGLE_APP_ID=1:979711182449:ios:daa7177f3cdd212f\n\n# Replace the path with the path to the key you just downloaded\n\"${PODS_ROOT}\"/FirebaseCrash/upload-sym \"/users/erikgrosskurth/documents/Telemed/Telemed-d5e6d7938a90.json\"";
 		};
 		FCE4A4B3C9AC7DA61AECF416 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;

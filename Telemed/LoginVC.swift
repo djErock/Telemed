@@ -180,13 +180,10 @@ class LoginVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         DataModel.sharedInstance.destroySessionSaveLogin()
-        if DataModel.sharedInstance.sessionInfo.Email.isEmpty {
-            username.text = "eg@marta.com"
-            password.text = "teamwork1"
-        }else {
+        
             username.text = DataModel.sharedInstance.sessionInfo.Email
             password.text = DataModel.sharedInstance.sessionInfo.Password
-        }
+        
         
         validationBox.textAlignment = .center
         validationBox.text = ""

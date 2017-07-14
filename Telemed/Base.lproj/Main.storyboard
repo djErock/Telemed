@@ -23,24 +23,45 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ah0-It-pUY">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ah0-It-pUY">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" editable="NO" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="1Ag-Aa-PeQ">
-                                        <rect key="frame" x="8" y="250" width="359" height="128"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <string key="text">Please bear with us as we continue to upgrade your experience and enhance the features of our app. Please press the button below and upgrade to our latest and greatest version. Thank you - Caduceus Telemed Team</string>
-                                        <color key="textColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                    </textView>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="746-Tc-Z7E">
-                                        <rect key="frame" x="8" y="386" width="359" height="30"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="29T-Pw-85X">
+                                        <rect key="frame" x="27" y="269" width="320" height="128"/>
+                                        <subviews>
+                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="1Ag-Aa-PeQ">
+                                                <rect key="frame" x="0.0" y="0.0" width="320" height="128"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                <string key="text">Please bear with us as we continue to upgrade your experience and enhance the features of our app. Please press the button below and upgrade to our latest and greatest version. Thank you - Caduceus Telemed Team</string>
+                                                <color key="textColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                            </textView>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="320" id="8pD-Ik-ChL"/>
+                                            <constraint firstAttribute="height" constant="128" id="wzR-pg-YDX"/>
+                                        </constraints>
+                                    </stackView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Update Available" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9Up-Xm-o0L">
+                                        <rect key="frame" x="0.0" y="16" width="375" height="50"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="50" id="u3v-W7-B0W"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="26"/>
+                                        <color key="textColor" red="0.1184043261" green="0.61843911490000003" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                        <color key="shadowColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                        <size key="shadowOffset" width="1" height="1"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="746-Tc-Z7E">
+                                        <rect key="frame" x="27" y="413" width="320" height="50"/>
                                         <color key="backgroundColor" red="0.1184043261" green="0.61843911490000003" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <rect key="contentStretch" x="0.10000000000000001" y="0.10000000000000001" width="1" height="1"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="50" id="Z3m-p4-47b"/>
+                                            <constraint firstAttribute="width" constant="320" id="gqL-cR-jAW"/>
+                                        </constraints>
                                         <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="17"/>
                                         <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <size key="titleShadowOffset" width="1" height="1"/>
@@ -52,25 +73,34 @@
                                             <action selector="updateApp:" destination="sJI-0a-5uy" eventType="touchUpInside" id="Lld-6E-Jaf"/>
                                         </connections>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Update Available" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9Up-Xm-o0L">
-                                        <rect key="frame" x="8" y="198" width="359" height="44"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="26"/>
-                                        <color key="textColor" red="0.1184043261" green="0.61843911490000003" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <nil key="highlightedColor"/>
-                                        <color key="shadowColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                        <size key="shadowOffset" width="1" height="1"/>
-                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" red="0.91576776649746194" green="0.91576776649746194" blue="0.91576776649746194" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstItem="29T-Pw-85X" firstAttribute="centerY" secondItem="Ah0-It-pUY" secondAttribute="centerY" id="9nh-dY-85d"/>
+                                    <constraint firstItem="9Up-Xm-o0L" firstAttribute="centerX" secondItem="Ah0-It-pUY" secondAttribute="centerX" id="Vwp-lD-lza"/>
+                                    <constraint firstAttribute="trailing" secondItem="9Up-Xm-o0L" secondAttribute="trailing" id="h5M-SY-FDd"/>
+                                    <constraint firstItem="29T-Pw-85X" firstAttribute="centerX" secondItem="Ah0-It-pUY" secondAttribute="centerX" id="mbF-8f-gLM"/>
+                                    <constraint firstItem="746-Tc-Z7E" firstAttribute="centerX" secondItem="Ah0-It-pUY" secondAttribute="centerX" id="pVP-g1-qys"/>
+                                    <constraint firstItem="9Up-Xm-o0L" firstAttribute="top" secondItem="Ah0-It-pUY" secondAttribute="top" constant="16" id="wFk-YY-BHX"/>
+                                    <constraint firstItem="746-Tc-Z7E" firstAttribute="top" secondItem="29T-Pw-85X" secondAttribute="bottom" constant="16" id="whY-QS-kZy"/>
+                                    <constraint firstItem="9Up-Xm-o0L" firstAttribute="leading" secondItem="Ah0-It-pUY" secondAttribute="leading" id="z0h-3O-5jT"/>
+                                </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Ah0-It-pUY" firstAttribute="leading" secondItem="xsW-nU-INw" secondAttribute="leading" id="NUa-WY-gPC"/>
+                            <constraint firstAttribute="trailing" secondItem="Ah0-It-pUY" secondAttribute="trailing" id="jhe-XU-L6b"/>
+                            <constraint firstItem="Ah0-It-pUY" firstAttribute="top" secondItem="xsW-nU-INw" secondAttribute="top" id="jiM-3C-9wD"/>
+                            <constraint firstItem="Ah0-It-pUY" firstAttribute="centerX" secondItem="xsW-nU-INw" secondAttribute="centerX" id="oLn-eb-10Y"/>
+                            <constraint firstItem="85f-lM-3Zr" firstAttribute="top" secondItem="Ah0-It-pUY" secondAttribute="bottom" id="pDI-c9-mWV"/>
+                            <constraint firstItem="Ah0-It-pUY" firstAttribute="centerY" secondItem="xsW-nU-INw" secondAttribute="centerY" id="sgm-0e-A7d"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uJU-3S-Hsy" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="176.80000000000001" y="-636.4317841079461"/>
+            <point key="canvasLocation" x="176.5625" y="-636.9140625"/>
         </scene>
         <!--App AuthenticationVC-->
         <scene sceneID="bB0-Lc-Zgp">
@@ -236,7 +266,7 @@
                                         <rect key="frame" x="0.0" y="28" width="375" height="81"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="TDG-yJ-Dte" id="xmm-X4-wi3">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="81"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="80.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DDm-U5-Ewq">
@@ -442,7 +472,7 @@
                                         <rect key="frame" x="0.0" y="28" width="343" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="8Ba-mT-9dB" id="xae-BG-u5h" customClass="CreditCardsViewCell" customModule="Telemed" customModuleProvider="target">
-                                            <rect key="frame" x="0.0" y="0.0" width="343" height="44"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="343" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Credit Card Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2x1-ef-hXD">
